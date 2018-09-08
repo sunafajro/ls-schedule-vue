@@ -1,6 +1,8 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Schedule from "./components/Schedule.vue";
+import Hours from "./components/Hours.vue";
+import Create from "./components/Create.vue";
 
 Vue.use(Router);
 
@@ -23,13 +25,15 @@ export default new Router({
     {
       path: "/schedule/hours",
       name: "hours",
-      component: () => import("./components/Hours.vue"),
+      component: Hours,
+      //component: () => import("./components/Hours.vue"),
       props: true
     },
     {
       path: "/schedule/create",
       name: "create",
-      component: () => import("./components/Create.vue"),
+      component: Create,
+      //component: () => import("./components/Create.vue"),
       props: true
     }
   ]
