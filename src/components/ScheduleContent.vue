@@ -18,40 +18,17 @@ export default {
     "b-col": bCol
   },
   data() {
-    return {
-      columns: [
-        {
-          id: 1,
-          thClass: "tbl-cell-10",
-          title: "День"
-        },
-        {
-          id: 2,
-          thClass: "tbl-cell-10",
-          title: "Кабинет"
-        },
-        {
-          id: 3,
-          thClass: "tbl-cell-10",
-          title: "Время"
-        },
-        {
-          id: 4,
-          thClass: "tbl-cell-20",
-          title: "Преподаватель"
-        },
-        {
-          id: 5,
-          thClass: "tbl-cell-40",
-          title: "Услуга"
-        },
-        {
-          id: 6,
-          thClass: "tbl-cell-5 text-center",
-          title: "Действ."
-        }
-      ]
-    };
+    return {};
+  },
+  props: {
+    columns: {
+      type: Array,
+      isRequired: true
+    },
+    lessons: {
+      type: Array,
+      isRequired: true
+    }
   }
 };
 </script>
