@@ -41,7 +41,7 @@ export default {
         });
     },
     getTeachers() {
-      return fetch("/teacher/get-teachers")
+      return fetch("/teacher/get-teachers-with-groups")
         .then(response => {
           if (response.ok) {
             return response.json();
