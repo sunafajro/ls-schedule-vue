@@ -1,33 +1,30 @@
 <template>
-  <b-col sm="12" md="10" lg="10" xl="10">
-    <table class="table table-bordered table-condensed table-hover table-striped small">
+  <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10">
+    <table class="table table-bordered table-hover table-sm table-striped">
       <thead>
         <tr>
-          <th :class="column.thClass" v-for="column in columns" :key="'th-key-' + column.id">{{ column.title }}</th>
+          <th :class="item.thClass" v-for="item in columns" :key="`th-key-${item.id}`">{{ item.title }}</th>
         </tr>
       </thead>
+      <tbody v-if="lessons.length">
+      </tbody>
     </table>
-  </b-col>
+  </div>
 </template>
 
 <script>
-import bCol from "bootstrap-vue/es/components/layout/col";
-
 export default {
-  components: {
-    "b-col": bCol
-  },
   data() {
     return {};
   },
   props: {
     columns: {
-      type: Array,
-      isRequired: true
+      required: true,
+      type: Array
     },
     lessons: {
-      type: Array,
-      isRequired: true
+      required: true,
+      type: Array
     }
   }
 };

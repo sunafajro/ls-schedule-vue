@@ -1,30 +1,26 @@
 <template>
-  <b-col sm="12" md="2" lg="2" xl="2">
+  <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
     <c-info :user="user"></c-info>
     <h4 class="schedule-headers-margin">Действия:</h4>
-    <b-button :block="true" size="sm" @click="$router.push('/schedule/index')">
-      <font-awesome-icon icon="calendar-alt" /> Расписание
-    </b-button>
-    <b-button :block="true" size="sm" v-if="user.roleId === '3' || user.roleId === '4'" @click="$router.push('/schedule/hours')">
+    <button class="btn btn-success btn-sm btn-block" type="button" @click="$router.push('/schedule/create')">
+      <font-awesome-icon icon="plus" /> Добавить
+    </button>
+    <button class="btn btn-secondary btn-sm btn-block" type="button" @click="$router.push('/schedule/hours')" v-if="user.roleId === '3' || user.roleId === '4'">
       <font-awesome-icon icon="clock" /> Почасовка
-    </b-button>
+    </button>
     <ul class="schedule-create-list-margin">
       <li>Список "Группа" динамический и разблокируется только после выбора преподавателя.</li>
       <li>Список "Кабинет" динамический и разблокируется только после выбора офиса.</li>
       <li>Время окончания занятия автоматически подстраивается на +1 час, после выбора времени начала занятия.</li>
     </ul>
-  </b-col>
+  </div>
 </template>
 
 <script>
-import bButton from "bootstrap-vue/es/components/button/button";
-import bCol from "bootstrap-vue/es/components/layout/col";
 import Info from "./UserInfo.vue";
 
 export default {
   components: {
-    "b-button": bButton,
-    "b-col": bCol,
     "c-info": Info
   },
   props: {

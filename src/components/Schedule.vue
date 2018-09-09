@@ -1,71 +1,52 @@
 <template>
-    <b-row>
-      <c-sidebar :filters="filters" :user="user" />
-      <c-content :columns="columns" :lessons="lessons" />
-    </b-row>
+  <div class="row">
+    <c-sidebar :filters="filters" :user="user" />
+    <c-content :columns="columns" :lessons="lessons" />
+  </div>
 </template>
 
 <script>
-import bRow from "bootstrap-vue/es/components/layout/row";
+import axios from "axios";
 import Content from "./ScheduleContent.vue";
 import Sidebar from "./ScheduleSidebar.vue";
 import { createDaysSelectItems } from "../utils";
 
 export default {
   components: {
-    "b-row": bRow,
     "c-content": Content,
     "c-sidebar": Sidebar
   },
-  computed: {
-    filters() {
-      const days = {
-        days: createDaysSelectItems()
-      }
-      const filters = { ...this.rawFilters, ...days };
-      return filters;
-    }
-  },
-  created() {
-    Promise.all([this.getScheduleFilters(), this.getScheduleInfo()]).then(
-      result => {
-        this.rawFilters = result[0].filtersData;
-        this.columns = result[1].columns;
-        this.lessons = result[1].lessonsData;
-      }
-    );
+  async created() {
+    const result = await Promise.all([
+      this.getScheduleFilters(),
+      this.getScheduleInfo()
+    ]);
+    this.filters = {
+      ...result[0].data.filters,
+      ...{ days: createDaysSelectItems() }
+    };
+    this.columns = result[1].data.columns;
+    this.lessons = result[1].data.lessons;
   },
   data() {
     return {
       columns: [],
       lessons: [],
-      rawFilters: {},
+      filters: {}
     };
   },
   methods: {
     getScheduleFilters() {
-      return fetch("/schedule/get-filters").then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error("Ошибка получения фильтров!");
-        }
-      });
+      return axios.get("/schedule/get-filters");
     },
     getScheduleInfo() {
-      return fetch("/schedule/get-schedule-info").then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error("Ошибка получения записей расписания!");
-        }
-      });
+      return axios.get("/schedule/get-lessons");
     }
   },
   props: {
     user: {
-      type: Object,
-      required: true
+      required: true,
+      type: Object
     }
   }
 };

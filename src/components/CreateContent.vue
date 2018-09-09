@@ -1,45 +1,59 @@
 <template>
-  <b-col sm="12" md="10" lg="10" xl="10">
+  <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10">
     <form>
         <b>Преподаватель:</b>
-        <b-form-select class="schedule-create-form-margin" @change="getTeacherGroups" :options="optionsTeacher" size="sm" v-model="selectedTeacher" />
+        <select class="form-control form-control-sm custom-select custom-select-sm schedule-create-form-margin" @change="getTeacherGroups" v-model="selectedTeacher">
+          <option :key="`opt-teacher-${i}`" :value="option.value" v-for="(option, i) in optionsTeacher">{{ option.text }}</option> 
+        </select>
         <b>Группа:</b>
-        <b-form-select class="schedule-create-form-margin" :disabled="!groups.length" :options="optionsGroup" size="sm" v-model="selectedGroup" />
+        <select class="form-control form-control-sm custom-select custom-select-sm schedule-create-form-margin" :disabled="!groups.length" v-model="selectedGroup">
+          <option :key="`opt-groups-${i}`" :value="option.value" v-for="(option, i) in optionsGroup">{{ option.text }}</option>
+        </select>
         <b>Офис:</b>
-        <b-form-select class="schedule-create-form-margin" @change="getOfficeRooms" :options="optionsOffice" size="sm" v-model="selectedOffice" />
+        <select class="form-control form-control-sm custom-select custom-select-sm schedule-create-form-margin" @change="getOfficeRooms" v-model="selectedOffice">
+          <option :key="`opt-offices-${i}`" :value="option.value" v-for="(option, i) in optionsOffice">{{ option.text }}</option>
+        </select>
         <b>Кабинет:</b>
-        <b-form-select class="schedule-create-form-margin" :disabled="!rooms.length" :options="optionsRoom" size="sm" v-model="selectedRoom" />
+        <select class="form-control form-control-sm custom-select custom-select-sm schedule-create-form-margin" :disabled="!rooms.length" v-model="selectedRoom">
+          <option :key="`opt-rooms-${i}`" :value="option.value" v-for="(option, i) in optionsRoom">{{ option.text }}</option>
+        </select>
         <b>Время начала:</b>
-        <b-row>
-          <b-col>
-            <b-form-select class="schedule-create-form-margin" @change="adjustEndHour" :options="optionsHours" size="sm" v-model="startHour" />  
-          </b-col>
-          <b-col>
-            <b-form-select class="schedule-create-form-margin" @change="adjustEndMinute" :options="optionsMinutes" size="sm" v-model="startMinute" />
-          </b-col>
-        </b-row>
+        <div class="row">
+          <div class="col">
+            <select class="form-control form-control-sm custom-select custom-select-sm schedule-create-form-margin" @change="adjustEndHour" v-model="startHour">
+              <option :key="`opt-start-hours-${i}`" :value="option.value" v-for="(option, i) in optionsHours">{{ option.text }}</option>
+            </select>
+          </div>
+          <div class="col">
+            <select class="form-control form-control-sm custom-select custom-select-sm schedule-create-form-margin" @change="adjustEndMinute" v-model="startMinute">
+              <option :key="`opt-start-minutes-${i}`" :value="option.value" v-for="(option, i) in optionsMinutes">{{ option.text }}</option>
+            </select>
+          </div>
+        </div>
         <b>Время конца:</b>
-        <b-row>
-          <b-col>
-            <b-form-select class="schedule-create-form-margin" :options="optionsHours" size="sm" v-model="endHour" />  
-          </b-col>
-          <b-col>
-            <b-form-select class="schedule-create-form-margin" :options="optionsMinutes" size="sm" v-model="endMinute" />
-          </b-col>
-        </b-row>
+        <div class="row">
+          <div class="col">
+            <select class="form-control form-control-sm custom-select custom-select-sm schedule-create-form-margin" v-model="endHour">
+              <option :key="`opt-end-hours-${i}`" :value="option.value" v-for="(option, i) in optionsHours">{{ option.text }}</option>
+            </select>  
+          </div>
+          <div class="col">
+            <select class="form-control form-control-sm custom-select custom-select-sm schedule-create-form-margin" v-model="endMinute">
+              <option :key="`opt-end-minutes-${i}`" :value="option.value" v-for="(option, i) in optionsMinutes">{{ option.text }}</option>
+            </select>
+          </div>
+        </div>
         <b>День недели:</b>
-        <b-form-select class="schedule-create-form-margin" :options="optionsDay" size="sm" v-model="selectedDay" />
-        <b-button variant="success">Создать</b-button>
+        <select class="form-control form-control-sm custom-select custom-select-sm schedule-create-form-margin" v-model="selectedDay">
+          <option :key="`opt-days-${i}`" :value="option.value" v-for="(option, i) in optionsDay">{{ option.text }}</option> 
+        </select>
+        <button class="btn btn-success" type="button">Создать</button>
     </form>
-  </b-col>
+  </div>
 </template>
 
 <script>
 import moment from "moment";
-import bButton from "bootstrap-vue/es/components/button/button";
-import bCol from "bootstrap-vue/es/components/layout/col";
-import bFormSelect from "bootstrap-vue/es/components/form-select/form-select";
-import bRow from "bootstrap-vue/es/components/layout/row";
 import {
   createDaysSelectItems,
   createHoursSelectItems,
@@ -47,12 +61,6 @@ import {
 } from "../utils";
 
 export default {
-  components: {
-    "b-button": bButton,
-    "b-col": bCol,
-    "b-form-select": bFormSelect,
-    "b-row": bRow
-  },
   computed: {
     optionsDay() {
       const options = [{ value: null, text: "-выбрать-" }].concat(
@@ -73,20 +81,26 @@ export default {
       return options;
     },
     optionsOffice() {
-      const options = [{ value: null, text: "-выбрать-" }].concat(this.offices);
+      const options = [{ value: null, text: "-выбрать-" }].concat(
+        Array.isArray(this.offices) ? this.offices : []
+      );
       return options;
     },
     optionsRoom() {
-      const options = [{ value: null, text: "-выбрать-" }].concat(this.rooms);
+      const options = [{ value: null, text: "-выбрать-" }].concat(
+        Array.isArray(this.rooms) ? this.rooms : []
+      );
       return options;
     },
     optionsGroup() {
-      const options = [{ value: null, text: "-выбрать-" }].concat(this.groups);
+      const options = [{ value: null, text: "-выбрать-" }].concat(
+        Array.isArray(this.groups) ? this.groups : []
+      );
       return options;
     },
     optionsTeacher() {
       const options = [{ value: null, text: "-выбрать-" }].concat(
-        this.teachers
+        Array.isArray(this.teachers) ? this.teachers : []
       );
       return options;
     }
@@ -95,8 +109,6 @@ export default {
     return {
       endHour: null,
       endMinute: null,
-      groups: [],
-      rooms: [],
       selectedDay: null,
       selectedOffice: null,
       selectedGroup: null,
@@ -108,45 +120,6 @@ export default {
   },
   methods: {
     create() {},
-    async getTeacherGroups(tid) {
-      try {
-        const { groupsData } = await fetch(
-          `/schedule/get-teacher-groups?tid=${tid}`
-        ).then(r => {
-          if (r.ok) {
-            return r.json();
-          } else {
-            throw new Error();
-          }
-        });
-        // модифицируем массив
-        const groups = groupsData.map(item => {
-          return {
-            value: item.value,
-            text: `#${item.value} ${item.text}`
-          };
-        });
-        this.groups = groups;
-      } catch (e) {
-        throw new Error("Ошибка получения групп преподавателя!");
-      }
-    },
-    async getOfficeRooms(oid) {
-      try {
-        const { roomsData } = await fetch(
-          `/room/index?type=bootstrap&oid=${oid}`
-        ).then(r => {
-          if (r.ok) {
-            return r.json();
-          } else {
-            throw new Error();
-          }
-        });
-        this.rooms = roomsData;
-      } catch (e) {
-        throw new Error("Ошибка получения кабинетов офиса!");
-      }
-    },
     adjustEndHour(h) {
       this.adjustEndTime(h, this.startMinute);
     },
@@ -159,13 +132,35 @@ export default {
         startDate.set("hour", parseInt(startHour));
         startDate.set("minute", parseInt(startMinute));
         const endDate = startDate.add(1, "h");
-        this.endHour = endDate.get("hour") < 10 ? `0${endDate.get("hour")}` : String(endDate.get("hour"));
-        this.endMinute = endDate.get("minute") < 10 ? `0${endDate.get("minute")}` : String(endDate.get("minute"));
+        this.endHour =
+          endDate.get("hour") < 10
+            ? `0${endDate.get("hour")}`
+            : String(endDate.get("hour"));
+        this.endMinute =
+          endDate.get("minute") < 10
+            ? `0${endDate.get("minute")}`
+            : String(endDate.get("minute"));
       }
     }
   },
   props: {
+    getOfficeRooms: {
+      required: true,
+      type: Function
+    },
+    getTeacherGroups: {
+      required: true,
+      type: Function
+    },
+    groups: {
+      required: true,
+      type: Array
+    },
     offices: {
+      required: true,
+      type: Array
+    },
+    rooms: {
       required: true,
       type: Array
     },

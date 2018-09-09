@@ -1,88 +1,94 @@
 <template>
-  <b-col sm="12" md="2" lg="2" xl="2">
+  <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
     <c-info :user="user"></c-info>
     <h4 class="schedule-headers-margin">Действия:</h4>
-    <b-button :block="true" size="sm" variant="success" @click="$router.push('/schedule/create')">
+    <button class="btn btn-success btn-sm btn-block" type="button" @click="$router.push('/schedule/create')">
       <font-awesome-icon icon="plus" /> Добавить
-    </b-button>
-    <b-button :block="true" size="sm" v-if="user.roleId === '3' || user.roleId === '4'" @click="$router.push('/schedule/hours')">
+    </button>
+    <button class="btn btn-secondary btn-sm btn-block" type="button" @click="$router.push('/schedule/hours')" v-if="user.roleId === '3' || user.roleId === '4'">
       <font-awesome-icon icon="clock" /> Почасовка
-    </b-button>
+    </button>
     <h4 class="schedule-headers-margin">Фильтры:</h4>
     <form @submit.prevent="onSubmit">
-      <b-form-select class="schedule-filter-form-margin" :options="optionsDay" size="sm" v-if="optionsDay.length > 1" v-model="selectedDay" />
-      <b-form-select class="schedule-filter-form-margin" :options="optionsOffice" size="sm" v-if="optionsOffice.length > 1"  v-model="selectedOffice" />
-      <b-form-select class="schedule-filter-form-margin" :options="optionsLanguage" size="sm" v-if="optionsLanguage.length > 1"  v-model="selectedLanguage" />
-      <b-form-select class="schedule-filter-form-margin" :options="optionsEduForm" size="sm" v-if="optionsEduForm.length > 1"  v-model="selectedEduForm" />
-      <b-form-select class="schedule-filter-form-margin" :options="optionsAge" size="sm" v-if="optionsAge.length > 1"  v-model="selectedAge" />
-      <b-form-select class="schedule-filter-form-margin" :options="optionsTeacher" size="sm" v-if="optionsTeacher.length > 1"  v-model="selectedTeacher" />
-      <b-button :block="true" size="sm" variant="info">
+      <select class="form-control form-control-sm custom-select custom-select-sm schedule-filter-form-margin" v-if="optionsDay.length > 1" v-model="selectedDay">
+        <option :key="`opt-days-${i}`" :value="option.value" v-for="(option, i) in optionsDay">{{ option.text }}</option>
+      </select>
+      <select class="form-control form-control-sm custom-select custom-select-sm schedule-filter-form-margin" v-if="optionsOffice.length > 1" v-model="selectedOffice">
+        <option :key="`opt-office-${i}`" :value="option.value" v-for="(option, i) in optionsOffice">{{ option.text }}</option>
+      </select>
+      <select class="form-control form-control-sm custom-select custom-select-sm schedule-filter-form-margin" v-if="optionsLanguage.length > 1" v-model="selectedLanguage">
+        <option :key="`opt-language-${i}`" :value="option.value" v-for="(option, i) in optionsLanguage">{{ option.text }}</option>
+      </select>
+      <select class="form-control form-control-sm custom-select custom-select-sm schedule-filter-form-margin" v-if="optionsEduForm.length > 1" v-model="selectedEduForm">
+        <option :key="`opt-eduform-${i}`" :value="option.value" v-for="(option, i) in optionsEduForm">{{ option.text }}</option>
+      </select>
+      <select class="form-control form-control-sm custom-select custom-select-sm schedule-filter-form-margin" v-if="optionsEduAge.length > 1" v-model="selectedEduAge">
+        <option :key="`opt-eduage-${i}`" :value="option.value" v-for="(option, i) in optionsEduAge">{{ option.text }}</option>
+      </select>
+      <select class="form-control form-control-sm custom-select custom-select-sm schedule-filter-form-margin" v-if="optionsTeacher.length > 1" v-model="selectedTeacher">
+        <option :key="`opt-teacher-${i}`" :value="option.value" v-for="(option, i) in optionsTeacher">{{ option.text }}</option>
+      </select>
+      <button class="btn btn-info btn-sm btn-block" type="button">
         <font-awesome-icon icon="filter" /> Применить
-      </b-button>
+      </button>
     </form>
-  </b-col>
+  </div>
 </template>
 
 <script>
-import bButton from "bootstrap-vue/es/components/button/button";
-import bCol from "bootstrap-vue/es/components/layout/col";
-import bFormSelect from "bootstrap-vue/es/components/form-select/form-select";
 import Info from "./UserInfo.vue";
 
 export default {
-  data() {
-    return {
-      selectedAge: null,
-      selectedDay: null,
-      selectedEduForm: null,
-      selectedLanguage: null,
-      selectedOffice: null,
-      selectedTeacher: null
-    };
-  },
   components: {
-    "b-button": bButton,
-    "b-col": bCol,
-    "b-form-select": bFormSelect,
     "c-info": Info
   },
   computed: {
-    optionsAge() {
-      const options = [{ value: null, text: "-все возрасты-" }].concat(
-        this.filters.eduages
+    optionsDay() {
+      const options = [{ value: null, text: "-все дни-" }].concat(
+        Array.isArray(this.filters.days) ? this.filters.days : []
       );
       return options;
     },
-    optionsDay() {
-      const options = [{ value: null, text: "-все дни-" }].concat(
-        this.filters.days
+    optionsEduAge() {
+      const options = [{ value: null, text: "-все возрасты-" }].concat(
+        Array.isArray(this.filters.eduages) ? this.filters.eduages : []
       );
       return options;
     },
     optionsEduForm() {
       const options = [{ value: null, text: "-все формы-" }].concat(
-        this.filters.eduforms
+        Array.isArray(this.filters.eduforms) ? this.filters.eduforms : []
       );
       return options;
     },
     optionsLanguage() {
       const options = [{ value: null, text: "-все языки-" }].concat(
-        this.filters.languages
+        Array.isArray(this.filters.languages) ? this.filters.languages : []
       );
       return options;
     },
     optionsOffice() {
       const options = [{ value: null, text: "-все офисы-" }].concat(
-        this.filters.offices
+        Array.isArray(this.filters.offices) ? this.filters.offices : []
       );
       return options;
     },
     optionsTeacher() {
       const options = [{ value: null, text: "-все преподаватели-" }].concat(
-        this.filters.teachers
+        Array.isArray(this.filters.teachers) ? this.filters.teachers : []
       );
       return options;
     }
+  },
+  data() {
+    return {
+      selectedDay: null,
+      selectedEduAge: null,
+      selectedEduForm: null,
+      selectedLanguage: null,
+      selectedOffice: null,
+      selectedTeacher: null
+    };
   },
   methods: {
     onSubmit() {}

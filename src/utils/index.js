@@ -5,7 +5,7 @@ export const createDaysSelectItems = () => {
   const days = [];
   for (let i = 1; i < 8; i++) {
     days.push({
-      value: i,
+      value: String(i),
       text: moment()
         .day(i)
         .format("dddd")
@@ -34,4 +34,23 @@ export const createMinutesSelectItems = () => {
     });
   }
   return minutes;
+};
+
+export const prepareRows = rows => {
+  const hours = [];
+  if (Object.keys(rows).length) {
+    Object.keys(rows).forEach(item => {
+      const languages = Object.keys(rows[item].languages);
+      languages.forEach((l, i) => {
+        hours.push({
+          id: `${item}-${l}`,
+          teacher: rows[item].teacher,
+          language: rows[item].languages[l].name,
+          hours: rows[item].languages[l].hours,
+          rowspan: languages.length > 1 ? (i === 0 ? languages.length : 1) : 0
+        });
+      });
+    });
+  }
+  return hours;
 };

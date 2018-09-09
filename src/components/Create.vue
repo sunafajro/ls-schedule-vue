@@ -1,60 +1,71 @@
 <template>
-    <b-row>
-      <c-sidebar :user="user" />
-      <c-content :offices="offices" :teachers="teachers" />
-    </b-row>
+  <div class="row">
+    <c-sidebar :user="user" />
+    <c-content :getOfficeRooms="getOfficeRooms" :getTeacherGroups="getTeacherGroups" :groups="groups" :offices="offices" :rooms="rooms" :teachers="teachers" />
+  </div>
 </template>
 
 <script>
-import bRow from "bootstrap-vue/es/components/layout/row";
+import axios from "axios";
 import Content from "./CreateContent.vue";
 import Sidebar from "./CreateSidebar.vue";
 
 export default {
   components: {
-    "b-row": bRow,
     "c-content": Content,
     "c-sidebar": Sidebar
   },
   created() {
-    Promise.all([this.getOffices(), this.getTeachers()])
-      .then(result => {
-        this.offices = result[0].offices;  
-        this.teachers = result[1].teachers;
-      });
+    Promise.all([this.getOffices(), this.getTeachers()]).then(result => {
+      this.offices = result[0].data.offices;
+      this.teachers = result[1].data.teachers;
+    });
   },
   data() {
     return {
+      groups: [],
       offices: [],
+      rooms: [],
       teachers: []
     };
   },
   methods: {
     getOffices() {
-      return fetch("/office/index?type=bootstrap")
-        .then(response => {
-          if (response.ok) {
-            return response.json();
-          } else {
-            throw new Error("Ошибка получения офисов!");
-          }
-        });
+      return axios.get("/schedule/get-offices");
+    },
+    async getOfficeRooms(oid) {
+      try {
+        const { data } = await axios.get(
+          `/schedule/get-office-rooms?oid=${oid}`
+        );
+        this.rooms = data.rooms;
+      } catch (e) {
+        throw new Error("Ошибка получения кабинетов офиса!");
+      }
     },
     getTeachers() {
-      return fetch("/teacher/get-teachers-with-groups")
-        .then(response => {
-          if (response.ok) {
-            return response.json();
-          } else {
-            throw new Error("Ошибка получения преподавателей!");
-          }
+      return axios.get("/schedule/get-teachers");
+    },
+    async getTeacherGroups(tid) {
+      try {
+        const { data } = await axios(`/schedule/get-teacher-groups?tid=${tid}`);
+        // модифицируем массив
+        const groups = data.groups.map(item => {
+          return {
+            value: item.value,
+            text: `#${item.value} ${item.text}`
+          };
         });
+        this.groups = groups;
+      } catch (e) {
+        throw new Error("Ошибка получения групп преподавателя!");
+      }
     }
   },
   props: {
     user: {
-      type: Object,
-      required: true
+      required: true,
+      type: Object
     }
   }
 };
