@@ -36,10 +36,10 @@ export default {
     getOffices() {
       return axios.get("/schedule/get-offices");
     },
-    async getOfficeRooms(oid) {
+    async getOfficeRooms(e) {
       try {
         const { data } = await axios.get(
-          `/schedule/get-office-rooms?oid=${oid}`
+          `/schedule/get-office-rooms?oid=${e.target.value}`
         );
         this.rooms = data.rooms;
       } catch (e) {
@@ -49,9 +49,9 @@ export default {
     getTeachers() {
       return axios.get("/schedule/get-teachers");
     },
-    async getTeacherGroups(tid) {
+    async getTeacherGroups(e) {
       try {
-        const { data } = await axios(`/schedule/get-teacher-groups?tid=${tid}`);
+        const { data } = await axios(`/schedule/get-teacher-groups?tid=${e.target.value}`);
         // модифицируем массив
         const groups = data.groups.map(item => {
           return {
