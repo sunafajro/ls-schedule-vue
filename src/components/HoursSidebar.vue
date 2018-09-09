@@ -1,27 +1,26 @@
 <template>
-  <b-col sm="12" md="2" lg="2" xl="2">
+  <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
     <c-info :user="user"></c-info>
     <h4 class="schedule-headers-margin">Действия:</h4>
-    <b-button :block="true" size="sm" variant="success" @click="$router.push('/schedule/create')">
+    <button class="btn btn-success btn-sm btn-block" type="button" @click="$router.push('/schedule/create')">
       <font-awesome-icon icon="plus" /> Добавить
-    </b-button>
-    <b-button :block="true" size="sm" @click="$router.push('/schedule/index')">
+    </button>
+    <button class="btn btn-secondary btn-sm btn-block" type="button" @click="$router.push('/schedule/index')">
       <font-awesome-icon icon="calendar-alt" /> Расписание
-    </b-button>
-    <h4 class="schedule-headers-margin" v-if="showFilters">Фильтры:</h4>
-    <form @submit.prevent="onSubmit" v-if="showFilters">
-      <b-form-select class="schedule-filter-form-margin" :options="optionsOffice" size="sm" v-if="optionsOffice.length > 1"  v-model="selectedOffice" />
-      <b-button :block="true" size="sm" variant="info">
+    </button>
+    <h4 class="schedule-headers-margin">Фильтры:</h4>
+    <form @submit.prevent="onSubmit">
+      <select class="form-control form-control-sm custom-select custom-select-sm schedule-filter-form-margin" v-if="optionsOffice.length > 1" v-model="selectedOffice">
+        <option :key="`opt-offices-${i}`" :value="option.value" v-for="(option, i) in optionsOffice">{{ option.text }}</option>
+      </select>
+      <button class="btn btn-info btn-sm btn-block" type="button">
         <font-awesome-icon icon="filter" /> Применить
-      </b-button>
+      </button>
     </form>
-  </b-col>
+  </div>
 </template>
 
 <script>
-import bButton from "bootstrap-vue/es/components/button/button";
-import bCol from "bootstrap-vue/es/components/layout/col";
-import bFormSelect from "bootstrap-vue/es/components/form-select/form-select";
 import Info from "./UserInfo.vue";
 
 export default {
@@ -31,24 +30,14 @@ export default {
     };
   },
   components: {
-    "b-button": bButton,
-    "b-col": bCol,
-    "b-form-select": bFormSelect,
     "c-info": Info
   },
   computed: {
     optionsOffice() {
       const options = [{ value: null, text: "-все офисы-" }].concat(
-        this.filters.offices
+        Array.isArray(this.filters.offices) ? this.filters.offices : []
       );
       return options;
-    },
-    showFilters() {
-      return this.filters.hasOwnProperty("offices") &&
-        Array.isArray(this.filters.offices) &&
-        this.filters.offices.length
-        ? true
-        : false;
     }
   },
   methods: {

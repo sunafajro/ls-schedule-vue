@@ -1,61 +1,50 @@
 <template>
-  <b-row>
+  <div class="row">
     <c-sidebar :filters="filters" :user="user" />
-    <c-content />
-  </b-row>
+    <c-content :columns="columns" :hours="hours"  />
+  </div>
 </template>
 
 <script>
-import bRow from "bootstrap-vue/es/components/layout/row";
+import axios from "axios";
 import Content from "./HoursContent.vue";
 import Sidebar from "./HoursSidebar.vue";
+import { prepareRows } from "../utils";
 
 export default {
   components: {
-    "b-row": bRow,
     "c-content": Content,
     "c-sidebar": Sidebar
   },
-  created() {
-    Promise.all([this.getScheduleFilters(), this.getScheduleHours()]).then(
-      result => {
-        this.filters = result[0].filtersData;
-        this.hours = result[1].hoursData;
-      }
-    );
+  async created() {
+    const result = await Promise.all([
+      this.getScheduleFilters(),
+      this.getScheduleHours()
+    ]);
+    this.filters = result[0].data.filters;
+    this.columns = result[1].data.columns;
+    this.hours = prepareRows(result[1].data.hours);
   },
-
   data() {
     return {
+      columns: [],
       filters: {},
       hours: []
     };
   },
   methods: {
     getScheduleFilters() {
-      return fetch("/schedule/get-filters").then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error("Ошибка получения фильтров!");
-        }
-      });
+      return axios.get("/schedule/get-filters");
     },
     getScheduleHours() {
-      return fetch("/schedule/get-hours").then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error("Ошибка получения часов преподавателей!");
-        }
-      });
+      return axios.get("/schedule/get-hours");
     }
   },
   props: {
     user: {
-      type: Object,
-      required: true
+      required: true,
+      type: Object
     }
   }
-}
+};
 </script>
