@@ -15,11 +15,14 @@ export default {
     "c-content": Content,
     "c-sidebar": Sidebar
   },
-  created() {
-    Promise.all([this.getOffices(), this.getTeachers()]).then(result => {
+  async created() {
+    try {
+      const result = await Promise.all([this.getOffices(), this.getTeachers()]);
       this.offices = result[0].data.offices;
       this.teachers = result[1].data.teachers;
-    });
+    } catch (e) {
+      throw new Error("Ошибка получения данных с сервера!");
+    }
   },
   data() {
     return {

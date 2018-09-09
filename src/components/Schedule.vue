@@ -17,16 +17,20 @@ export default {
     "c-sidebar": Sidebar
   },
   async created() {
-    const result = await Promise.all([
-      this.getScheduleFilters(),
-      this.getScheduleInfo()
-    ]);
-    this.filters = {
-      ...result[0].data.filters,
-      ...{ days: createDaysSelectItems() }
-    };
-    this.columns = result[1].data.columns;
-    this.lessons = result[1].data.lessons;
+    try {
+      const result = await Promise.all([
+        this.getScheduleFilters(),
+        this.getScheduleInfo()
+      ]);
+      this.filters = {
+        ...result[0].data.filters,
+        ...{ days: createDaysSelectItems() }
+      };
+      this.columns = result[1].data.columns;
+      this.lessons = result[1].data.lessons;
+    } catch (e) {
+      throw new Error("Ошибка получения данных с сервера!");
+    }
   },
   data() {
     return {
