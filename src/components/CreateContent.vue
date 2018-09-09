@@ -120,11 +120,11 @@ export default {
   },
   methods: {
     create() {},
-    adjustEndHour(h) {
-      this.adjustEndTime(h, this.startMinute);
+    adjustEndHour(e) {
+      this.adjustEndTime(e.target.value, this.startMinute);
     },
-    adjustEndMinute(m) {
-      this.adjustEndTime(this.startHour, m);
+    adjustEndMinute(e) {
+      this.adjustEndTime(this.startHour, e.target.value);
     },
     adjustEndTime(startHour, startMinute) {
       if (startHour && startMinute) {
