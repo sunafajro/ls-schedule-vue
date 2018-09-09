@@ -1,16 +1,13 @@
 <template>
-  <b-container fluid>
+  <div class="container-fluid">
     <router-view :user="user" />
-  </b-container>
+  </div>
 </template>
 
 <script>
-import bContainer from "bootstrap-vue/es/components/layout/container";
+import axios from 'axios';
 
 export default {
-  components: {
-    "b-container": bContainer
-  },
   created() {
     this.getUserInfo();
   },
@@ -20,19 +17,13 @@ export default {
     };
   },
   methods: {
-    getUserInfo() {
-      return fetch("/user/get-info")
-        .then(response => {
-          if (response.ok) {
-            return response.json();
-          } else {
-            throw new Error("Ошибка получения сведений о пользователе!");
-          }
-        })
-        .then(result => {
-          this.user = result.userData;
-        })
-        .catch(err => err);
+    async getUserInfo() {
+      try {
+        const { data } = await axios.get("/user/get-info");
+        this.user = data.user;
+      } catch(e) {
+        throw new Error("Ошибка получения сведений о пользователе!");
+      }
     }
   }
 };
