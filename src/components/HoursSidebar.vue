@@ -13,7 +13,7 @@
       <select class="form-control form-control-sm custom-select custom-select-sm schedule-filter-form-margin" v-if="optionsOffice.length > 1" v-model="selectedOffice">
         <option :key="`opt-offices-${i}`" :value="option.value" v-for="(option, i) in optionsOffice">{{ option.text }}</option>
       </select>
-      <button class="btn btn-info btn-sm btn-block" type="button">
+      <button class="btn btn-info btn-sm btn-block" type="submit">
         <font-awesome-icon icon="filter" /> Применить
       </button>
     </form>
@@ -41,9 +41,17 @@ export default {
     }
   },
   methods: {
-    onSubmit() {}
+    onSubmit() {
+      if (this.selectedOffice) {
+        this.filter(this.selectedOffice);
+      }
+    }
   },
   props: {
+    filter: {
+      require: true,
+      type: Function
+    },
     filters: {
       required: true,
       type: Object
