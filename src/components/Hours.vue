@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <c-sidebar :filters="filters" :user="user" :filter="filterHours"/>
+    <c-sidebar :filter="filterHours" :filters="filters" :user="user" />
     <c-content :columns="columns" :hours="hours"  />
   </div>
 </template>
@@ -9,7 +9,7 @@
 import axios from "axios";
 import Content from "./HoursContent.vue";
 import Sidebar from "./HoursSidebar.vue";
-import { prepareRows } from "../utils";
+import { prepareUrlParams, prepareRows } from "../utils";
 
 export default {
   components: {
@@ -43,9 +43,10 @@ export default {
     getScheduleHours() {
       return axios.get("/schedule/get-hours");
     },
-    async filterHours(oid = null) {
+    async filterHours(params = {}) {
       try {
-        const { data } = await axios.get(`/schedule/get-hours?oid=${oid}`);
+        const url = prepareUrlParams("/schedule/get-hours", params);
+        const { data } = await axios.get(url);
         this.hours = prepareRows(data.hours);
       } catch (e) {
         throw new Error("Ошибка фильтрации почасовок преподавателей!");
