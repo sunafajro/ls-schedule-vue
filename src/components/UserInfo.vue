@@ -23,9 +23,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.user-info-block {
-  padding: 0.5rem;
-}
-</style>
