@@ -9,7 +9,7 @@
 import axios from "axios";
 import Content from "./HoursContent.vue";
 import Sidebar from "./HoursSidebar.vue";
-import { prepareUrlParams, prepareRows } from "../utils";
+import { notify, prepareUrlParams, prepareRows } from "../utils";
 
 export default {
   components: {
@@ -26,6 +26,7 @@ export default {
       this.columns = result[1].data.columns;
       this.hours = prepareRows(result[1].data.hours);
     } catch (e) {
+      notify("error", "Ошибка получения данных с сервера!");
       throw new Error("Ошибка получения данных с сервера!");
     }
   },
@@ -49,6 +50,7 @@ export default {
         const { data } = await axios.get(url);
         this.hours = prepareRows(data.hours);
       } catch (e) {
+        notify("error", "Ошибка фильтрации почасовок преподавателей!");
         throw new Error("Ошибка фильтрации почасовок преподавателей!");
       }
     }
