@@ -1,5 +1,5 @@
 <template>
-  <div class="card user-info-block" v-if="user">
+  <div class="card schedule-card-half-rem-padding" v-if="user">
     <small v-if="!user.teacherId"><b v-if="user.name">{{ user.name }}</b></small>
     <small v-if="user.teacherId">
       <b v-if="user.name">

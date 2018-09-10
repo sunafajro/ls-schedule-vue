@@ -7,6 +7,7 @@
 
 <script>
 import axios from "axios";
+import { notify } from "./utils";
 import Breadcrumbs from "./components/Breadcrumbs.vue";
 
 export default {
@@ -27,6 +28,7 @@ export default {
         const { data } = await axios.get("/user/get-info");
         this.user = data.user;
       } catch (e) {
+        notify("error", "Ошибка получения сведений о пользователе!");
         throw new Error("Ошибка получения сведений о пользователе!");
       }
     }
