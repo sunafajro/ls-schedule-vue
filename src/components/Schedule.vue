@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <c-sidebar :filters="filters" :user="user" />
+    <c-sidebar :filter="filterLessons" :filters="filters" :user="user" />
     <c-content :columns="columns" :lessons="lessons" />
   </div>
 </template>
@@ -9,7 +9,7 @@
 import axios from "axios";
 import Content from "./ScheduleContent.vue";
 import Sidebar from "./ScheduleSidebar.vue";
-import { createDaysSelectItems } from "../utils";
+import { createDaysSelectItems, notify, prepareUrlParams } from "../utils";
 
 export default {
   components: {
@@ -29,6 +29,7 @@ export default {
       this.columns = result[1].data.columns;
       this.lessons = result[1].data.lessons;
     } catch (e) {
+      notify("error", "Ошибка получения данных с сервера!");
       throw new Error("Ошибка получения данных с сервера!");
     }
   },
@@ -45,6 +46,16 @@ export default {
     },
     getScheduleInfo() {
       return axios.get("/schedule/get-lessons");
+    },
+    async filterLessons(params = {}) {
+      try {
+        let url = prepareUrlParams(`/schedule/get-lessons`, params);
+        const { data } = await axios.get(url);
+        this.lessons = data.lessons;
+      } catch (e) {
+        notify("error", "Ошибка фильтрации занятий в расписании!");
+        throw new Error("Ошибка фильтрации занятий в расписании!");
+      }
     }
   },
   props: {
