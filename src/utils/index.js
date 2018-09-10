@@ -1,5 +1,24 @@
+import axios from "axios";
+import Noty from "noty";
 import moment from "moment";
+
 moment.locale("ru");
+
+/**
+ * выводит всплывающее уведомление
+ * types: alert, success, warning, error, info/information
+ * @param {string} type 
+ * @param {string} text 
+ */
+export const notify = (type, text) => {
+  new Noty({
+    theme: "bootstrap-v4",
+    text: text,
+    type: type,
+    timeout: 3000,
+    progressBar: false
+  }).show();
+};
 
 export const createDaysSelectItems = () => {
   const days = [];
@@ -69,4 +88,13 @@ export const prepareUrlParams = (url, params) => {
     }
   });
   return args.length ? `${url}?${args.join("&")}` : url;
+};
+
+export const getCsrfTocken = async () => {
+  try {
+    const { data } = await axios.get("/site/csrf");
+    return data;
+  } catch (e) {
+    throw new Error("Ошибка запроса к серверу!");
+  }
 };
