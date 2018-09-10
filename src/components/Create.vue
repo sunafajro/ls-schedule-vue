@@ -7,6 +7,7 @@
 
 <script>
 import axios from "axios";
+import { notify } from "../utils";
 import Content from "./CreateContent.vue";
 import Sidebar from "./CreateSidebar.vue";
 
@@ -21,6 +22,7 @@ export default {
       this.offices = result[0].data.offices;
       this.teachers = result[1].data.teachers;
     } catch (e) {
+      notify("error", "Ошибка получения данных с сервера!");
       throw new Error("Ошибка получения данных с сервера!");
     }
   },
@@ -43,6 +45,7 @@ export default {
         );
         this.rooms = data.rooms;
       } catch (e) {
+        notify("error", "Ошибка получения кабинетов офиса!");
         throw new Error("Ошибка получения кабинетов офиса!");
       }
     },
@@ -51,7 +54,9 @@ export default {
     },
     async getTeacherGroups(e) {
       try {
-        const { data } = await axios(`/schedule/get-teacher-groups?tid=${e.target.value}`);
+        const { data } = await axios(
+          `/schedule/get-teacher-groups?tid=${e.target.value}`
+        );
         // модифицируем массив
         const groups = data.groups.map(item => {
           return {
@@ -61,6 +66,7 @@ export default {
         });
         this.groups = groups;
       } catch (e) {
+        notify("error", "Ошибка получения групп преподавателя!");
         throw new Error("Ошибка получения групп преподавателя!");
       }
     }

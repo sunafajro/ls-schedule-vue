@@ -8,11 +8,10 @@
     <button class="btn btn-secondary btn-sm btn-block" type="button" @click="$router.push('/schedule/hours')" v-if="user.roleId === '3' || user.roleId === '4'">
       <font-awesome-icon icon="clock" /> Почасовка
     </button>
-    <ul class="schedule-top-one-rem-margin">
-      <li>Список "Группа" динамический и разблокируется только после выбора преподавателя.</li>
-      <li>Список "Кабинет" динамический и разблокируется только после выбора офиса.</li>
-      <li>Время окончания занятия автоматически подстраивается на +1 час, после выбора времени начала занятия.</li>
-    </ul>
+    <h4 class="schedule-top-half-rem-margin">Подсказки:</h4>
+    <div class="card schedule-top-half-rem-margin schedule-card-half-rem-padding"><small>Список "Группа" динамический и разблокируется только после выбора преподавателя.</small></div>
+    <div class="card schedule-top-half-rem-margin schedule-card-half-rem-padding"><small>Список "Кабинет" динамический и разблокируется только после выбора офиса.</small></div>
+    <div class="card schedule-top-half-rem-margin schedule-card-half-rem-padding"><small>Время окончания занятия автоматически подстраивается на +1 час, после выбора времени начала занятия.</small></div>
   </div>
 </template>
 

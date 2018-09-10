@@ -1,6 +1,6 @@
 <template>
   <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10">
-    <form>
+    <form @submit.prevent="onSubmit">
         <b>Преподаватель:</b>
         <select class="form-control form-control-sm custom-select custom-select-sm schedule-top-bottom-half-rem-margin" @change="getTeacherGroups" v-model="selectedTeacher">
           <option :key="`opt-teacher-${i}`" :value="option.value" v-for="(option, i) in optionsTeacher">{{ option.text }}</option> 
@@ -47,17 +47,20 @@
         <select class="form-control form-control-sm custom-select custom-select-sm schedule-top-bottom-half-rem-margin" v-model="selectedDay">
           <option :key="`opt-days-${i}`" :value="option.value" v-for="(option, i) in optionsDay">{{ option.text }}</option> 
         </select>
-        <button class="btn btn-success" type="button">Создать</button>
+        <button class="btn btn-success" type="submit">Создать</button>
     </form>
   </div>
 </template>
 
 <script>
+import axios from "axios";
 import moment from "moment";
 import {
   createDaysSelectItems,
   createHoursSelectItems,
-  createMinutesSelectItems
+  createMinutesSelectItems,
+  getCsrfTocken,
+  notify
 } from "../utils";
 
 export default {
@@ -119,7 +122,6 @@ export default {
     };
   },
   methods: {
-    create() {},
     adjustEndHour(e) {
       this.adjustEndTime(e.target.value, this.startMinute);
     },
@@ -141,7 +143,74 @@ export default {
             ? `0${endDate.get("minute")}`
             : String(endDate.get("minute"));
       }
-    }
+    },
+    async createLesson(schedule = {}) {
+      const token = await getCsrfTocken();
+      const body = { ...token, ...schedule };
+      try {
+        const { data } = await axios.post(
+          "/schedule/create",
+          JSON.stringify(body),
+          {
+            headers: { "Content-Type": "application/json" }
+          }
+        );
+        const keys = Object.keys(this.$data);
+        keys.forEach(i => {
+          this[i] = null;
+        });
+        notify("success", data.message);
+      } catch (e) {
+        notify("error", "Не удалось добавить занятие в расписание!");
+        throw new Error("Не удалось добавить занятие в расписание!");
+      }
+    },
+    onSubmit() {
+      let validForm = true;
+      const data = {
+        Schedule: {}
+      }
+      if (this.selectedTeacher) {
+        data.Schedule.calc_teacher = this.selectedTeacher;
+      } else {
+        validForm = false;
+      }
+      if (this.selectedGroup) {
+        data.Schedule.calc_groupteacher = this.selectedGroup;
+      } else {
+        validForm = false;
+      }
+      if (this.selectedOffice) {
+        data.Schedule.calc_office = this.selectedOffice;
+      } else {
+        validForm = false;
+      }
+      if (this.selectedRoom) {
+        data.Schedule.calc_cabinetoffice = this.selectedRoom;
+      } else {
+        validForm = false;
+      }
+      if (this.startHour && this.startMinute) {
+        data.Schedule.time_begin = `${this.startHour}:${this.startMinute}`;
+      } else {
+        validForm = false;
+      }
+      if (this.endHour && this.endMinute) {
+        data.Schedule.time_end = `${this.endHour}:${this.endMinute}`;
+      } else {
+        validForm = false;
+      }
+      if (this.selectedDay) {
+        data.Schedule.calc_denned = this.selectedDay;
+      } else {
+        validForm = false;
+      }
+      if (validForm) {
+        this.createLesson(data);
+      } else {
+        notify("error", "Заполнены не все поля формы!");
+      }
+    },
   },
   props: {
     getOfficeRooms: {
