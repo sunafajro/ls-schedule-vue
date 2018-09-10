@@ -11,6 +11,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import "bootstrap/dist/css/bootstrap.css";
+import "noty/lib/themes/bootstrap-v4.css";
+import "noty/lib/noty.css";
 import "./style.css";
 
 library.add(faCalendarAlt, faClock, faEraser, faFilter, faPlus);
