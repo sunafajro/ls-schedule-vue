@@ -54,3 +54,19 @@ export const prepareRows = rows => {
   }
   return hours;
 };
+
+/**
+ * возвращает url с параметрами
+ * @param {string} url
+ * @param {Object} params
+ * @returns {string}
+ */
+export const prepareUrlParams = (url, params) => {
+  const args = [];
+  Object.keys(params).forEach(i => {
+    if (params[i]) {
+      args.push(`${i}=${params[i]}`);
+    }
+  });
+  return args.length ? `${url}?${args.join("&")}` : url;
+};
