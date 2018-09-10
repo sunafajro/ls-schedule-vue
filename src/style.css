@@ -3,10 +3,6 @@
     margin-top: 0.5rem;
 }
 
-.schedule-top-one-rem-margin {
-  margin-top: 1rem;
-}
-
 .schedule-top-half-rem-margin {
   margin-top: 0.5rem;
 }
@@ -15,6 +11,6 @@
   margin-bottom: 0.5rem;
 }
 
-.user-info-block {
+.schedule-card-half-rem-padding {
   padding: 0.5rem;
 }
