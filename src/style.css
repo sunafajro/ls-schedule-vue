@@ -1,0 +1,20 @@
+.schedule-top-bottom-half-rem-margin {
+    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.schedule-top-one-rem-margin {
+  margin-top: 1rem;
+}
+
+.schedule-top-half-rem-margin {
+  margin-top: 0.5rem;
+}
+
+.schedule-bottom-half-rem-margin {
+  margin-bottom: 0.5rem;
+}
+
+.user-info-block {
+  padding: 0.5rem;
+}
