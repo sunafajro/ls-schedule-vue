@@ -1,12 +1,12 @@
 <template>
-  <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+  <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
     <c-info :user="user"></c-info>
     <h4 class="schedule-top-half-rem-margin">Действия:</h4>
-    <button class="btn btn-success btn-sm btn-block" type="button" @click="$router.push('/schedule/create')">
-      <font-awesome-icon icon="plus" /> Добавить
+    <button class="btn btn-success btn-sm btn-block" type="button" @click="$router.push('/create')">
+      <i class="fa fa-plus" aria-hidden="true"></i> Добавить
     </button>
-    <button class="btn btn-secondary btn-sm btn-block" type="button" @click="$router.push('/schedule/index')">
-      <font-awesome-icon icon="calendar-alt" /> Расписание
+    <button class="btn btn-secondary btn-sm btn-block" type="button" @click="$router.push('/')">
+      <i class="fa fa-calendar" aria-hidden="true"></i> Расписание
     </button>
     <h4 class="schedule-top-half-rem-margin">Фильтры:</h4>
     <form @submit.prevent="onSubmit">
@@ -14,14 +14,14 @@
         <option :key="`opt-offices-${i}`" :value="option.value" v-for="(option, i) in offices">{{ option.text }}</option>
       </select>
       <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-12 col-xs-6">
-          <button class="btn btn-info btn-sm btn-block schedule-bottom-half-rem-margin" type="submit">
-            <font-awesome-icon icon="filter" /> Применить
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 schedule-bottom-half-rem-margin">
+          <button class="btn btn-info btn-sm btn-block" type="submit">
+            <i class="fa fa-filter" aria-hidden="true"></i> Применить
           </button>
         </div>
-        <div class="col-sm-12 col-md-12 col-lg-12 col-xs-6">
-          <button class="btn btn-warning btn-sm btn-block schedule-bottom-half-rem-margin" @click="clearFilters" type="button">
-            <font-awesome-icon icon="eraser" /> Сброс
+        <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 schedule-bottom-half-rem-margin">
+          <button class="btn btn-warning btn-sm btn-block" @click="clearFilters" type="button">
+            <i class="fa fa-eraser" aria-hidden="true"></i> Сброс
           </button>
         </div>
       </div>

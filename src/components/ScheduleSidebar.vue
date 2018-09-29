@@ -2,45 +2,47 @@
   <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
     <c-info :user="user"></c-info>
     <h4 class="schedule-top-half-rem-margin">Действия:</h4>
-    <button class="btn btn-success btn-sm btn-block" type="button" @click="$router.push('/schedule/create')">
-      <font-awesome-icon icon="plus" /> Добавить
+    <button class="btn btn-success btn-sm btn-block" type="button" @click="$router.push('/create')">
+      <i class="fa fa-plus" aria-hidden="true"></i> Добавить
     </button>
-    <button class="btn btn-secondary btn-sm btn-block" type="button" @click="$router.push('/schedule/hours')" v-if="user.roleId === '3' || user.roleId === '4'">
-      <font-awesome-icon icon="clock" /> Почасовка
+    <button class="btn btn-secondary btn-sm btn-block" type="button" @click="$router.push('/hours')" v-if="user.roleId === '3' || user.roleId === '4'">
+      <i class="fa fa-clock-o" aria-hidden="true"></i> Почасовка
     </button>
-    <h4 class="schedule-top-half-rem-margin">Фильтры:</h4>
-    <form @submit.prevent="onSubmit">
-      <select class="form-control form-control-sm custom-select custom-select-sm schedule-bottom-half-rem-margin" v-if="days.length > 1" v-model="did">
-        <option :key="`opt-days-${i}`" :value="option.value" v-for="(option, i) in days">{{ option.text }}</option>
-      </select>
-      <select class="form-control form-control-sm custom-select custom-select-sm schedule-bottom-half-rem-margin" v-if="offices.length > 1" v-model="oid">
-        <option :key="`opt-office-${i}`" :value="option.value" v-for="(option, i) in offices">{{ option.text }}</option>
-      </select>
-      <select class="form-control form-control-sm custom-select custom-select-sm schedule-bottom-half-rem-margin" v-if="languages.length > 1" v-model="lid">
-        <option :key="`opt-language-${i}`" :value="option.value" v-for="(option, i) in languages">{{ option.text }}</option>
-      </select>
-      <select class="form-control form-control-sm custom-select custom-select-sm schedule-bottom-half-rem-margin" v-if="forms.length > 1" v-model="fid">
-        <option :key="`opt-eduform-${i}`" :value="option.value" v-for="(option, i) in forms">{{ option.text }}</option>
-      </select>
-      <select class="form-control form-control-sm custom-select custom-select-sm schedule-bottom-half-rem-margin" v-if="ages.length > 1" v-model="aid">
-        <option :key="`opt-eduage-${i}`" :value="option.value" v-for="(option, i) in ages">{{ option.text }}</option>
-      </select>
-      <select class="form-control form-control-sm custom-select custom-select-sm schedule-bottom-half-rem-margin" v-if="teachers.length > 1" v-model="tid">
-        <option :key="`opt-teacher-${i}`" :value="option.value" v-for="(option, i) in teachers">{{ option.text }}</option>
-      </select>
-      <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-12 col-xs-6">
-          <button class="btn btn-info btn-sm btn-block schedule-bottom-half-rem-margin" type="submit">
-            <font-awesome-icon icon="filter" /> Применить
-          </button>
+    <div v-if="Object.keys(filters).length">
+      <h4 class="schedule-top-half-rem-margin">Фильтры:</h4>
+      <form @submit.prevent="onSubmit">
+        <select class="form-control form-control-sm custom-select custom-select-sm schedule-bottom-half-rem-margin" v-if="days.length > 1" v-model="did">
+          <option :key="`opt-days-${i}`" :value="option.value" v-for="(option, i) in days">{{ option.text }}</option>
+        </select>
+        <select class="form-control form-control-sm custom-select custom-select-sm schedule-bottom-half-rem-margin" v-if="offices.length > 1" v-model="oid">
+          <option :key="`opt-office-${i}`" :value="option.value" v-for="(option, i) in offices">{{ option.text }}</option>
+        </select>
+        <select class="form-control form-control-sm custom-select custom-select-sm schedule-bottom-half-rem-margin" v-if="languages.length > 1" v-model="lid">
+          <option :key="`opt-language-${i}`" :value="option.value" v-for="(option, i) in languages">{{ option.text }}</option>
+        </select>
+        <select class="form-control form-control-sm custom-select custom-select-sm schedule-bottom-half-rem-margin" v-if="forms.length > 1" v-model="fid">
+          <option :key="`opt-eduform-${i}`" :value="option.value" v-for="(option, i) in forms">{{ option.text }}</option>
+        </select>
+        <select class="form-control form-control-sm custom-select custom-select-sm schedule-bottom-half-rem-margin" v-if="ages.length > 1" v-model="aid">
+          <option :key="`opt-eduage-${i}`" :value="option.value" v-for="(option, i) in ages">{{ option.text }}</option>
+        </select>
+        <select class="form-control form-control-sm custom-select custom-select-sm schedule-bottom-half-rem-margin" v-if="teachers.length > 1" v-model="tid">
+          <option :key="`opt-teacher-${i}`" :value="option.value" v-for="(option, i) in teachers">{{ option.text }}</option>
+        </select>
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 schedule-bottom-half-rem-margin">
+            <button class="btn btn-info btn-sm btn-block" type="submit">
+              <i class="fa fa-filter" aria-hidden="true"></i> Применить
+            </button>
+          </div>
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 schedule-bottom-half-rem-margin">
+            <button class="btn btn-warning btn-sm btn-block" @click="clearFilters" type="button">
+              <i class="fa fa-eraser" aria-hidden="true"></i> Сброс
+            </button>
+          </div>
         </div>
-        <div class="col-sm-12 col-md-12 col-lg-12 col-xs-6">
-          <button class="btn btn-warning btn-sm btn-block schedule-bottom-half-rem-margin" @click="clearFilters" type="button">
-            <font-awesome-icon icon="eraser" /> Сброс
-          </button>
-        </div>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 </template>
 

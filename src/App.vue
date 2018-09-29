@@ -1,27 +1,14 @@
 <template>
-  <div class="page-wrapper">
-    <c-header />
-    <main role="main" class="container-fluid">
-      <c-breadcrumbs />
-      <router-view :user="user" />
-    </main>
-    <c-footer />
+  <div id="schedule">
+    <router-view :user="user" />
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import { notify } from "./utils";
-import Breadcrumbs from "./common/Breadcrumbs.vue";
-import Footer from "./common/Footer.vue";
-import Header from "./common/Header.vue";
 
 export default {
-  components: {
-    "c-breadcrumbs": Breadcrumbs,
-    "c-footer": Footer,
-    "c-header": Header
-  },
   created() {
     this.getUserInfo();
   },
@@ -34,7 +21,7 @@ export default {
     async getUserInfo() {
       try {
         const { data } = await axios.get("/user/get-info");
-        this.user = data.user;
+        this.user = data.userData;
       } catch (e) {
         notify("error", "Ошибка получения сведений о пользователе!");
         throw new Error("Ошибка получения сведений о пользователе!");

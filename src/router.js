@@ -10,27 +10,19 @@ export default new Router({
   routes: [
     {
       path: "/",
-      redirect: "/schedule/index"
-    },
-    {
-      path: "/schedule",
-      redirect: "/schedule/index"
-    },
-    {
-      path: "/schedule/index",
       name: "schedule",
       component: Schedule,
       props: true
     },
     {
-      path: "/schedule/hours",
+      path: "/hours",
       name: "hours",
       component: Hours,
       //component: () => import("./components/Hours.vue"),
       props: true
     },
     {
-      path: "/schedule/create",
+      path: "/create",
       name: "create",
       component: Create,
       //component: () => import("./components/Create.vue"),

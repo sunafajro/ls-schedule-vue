@@ -12,7 +12,7 @@ moment.locale("ru");
  */
 export const notify = (type, text) => {
   new Noty({
-    theme: "bootstrap-v4",
+    theme: "bootstrap-v3",
     text: text,
     type: type,
     timeout: 3000,
@@ -87,7 +87,7 @@ export const prepareUrlParams = (url, params) => {
       args.push(`${i}=${params[i]}`);
     }
   });
-  return args.length ? `${url}?${args.join("&")}` : url;
+  return args.length ? `${url}&${args.join("&")}` : url;
 };
 
 export const getCsrfTocken = async () => {

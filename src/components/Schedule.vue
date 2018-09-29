@@ -42,15 +42,15 @@ export default {
   },
   methods: {
     getScheduleFilters() {
-      return axios.get("/schedule/get-filters");
+      return axios.post("/schedule?t=filters");
     },
     getScheduleInfo() {
-      return axios.get("/schedule/get-lessons");
+      return axios.post("/schedule?t=lessons");
     },
     async filterLessons(params = {}) {
       try {
-        let url = prepareUrlParams(`/schedule/get-lessons`, params);
-        const { data } = await axios.get(url);
+        let url = prepareUrlParams(`/schedule?t=lessons`, params);
+        const { data } = await axios.post(url);
         this.lessons = data.lessons;
       } catch (e) {
         notify("error", "Ошибка фильтрации занятий в расписании!");

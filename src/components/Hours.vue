@@ -39,15 +39,15 @@ export default {
   },
   methods: {
     getScheduleFilters() {
-      return axios.get("/schedule/get-filters");
+      return axios.post("/schedule?t=filters");
     },
     getScheduleHours() {
-      return axios.get("/schedule/get-hours");
+      return axios.post("/schedule?t=hours");
     },
     async filterHours(params = {}) {
       try {
-        const url = prepareUrlParams("/schedule/get-hours", params);
-        const { data } = await axios.get(url);
+        const url = prepareUrlParams("/schedule?t=hours", params);
+        const { data } = await axios.post(url);
         this.hours = prepareRows(data.hours);
       } catch (e) {
         notify("error", "Ошибка фильтрации почасовок преподавателей!");

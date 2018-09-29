@@ -1,6 +1,6 @@
 <template>
   <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10">
-    <table class="table table-bordered table-hover table-sm table-striped">
+    <table class="table table-bordered table-hover table-condensed table-striped small">
       <thead v-if="columns.length">
         <tr>
           <th :class="item.thClass" :key="`th-key-${item.id}`" v-for="item in columns">{{ item.title }}</th>

@@ -2,49 +2,49 @@
   <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10">
     <form @submit.prevent="onSubmit">
         <b>Преподаватель:</b>
-        <select class="form-control form-control-sm custom-select custom-select-sm schedule-top-bottom-half-rem-margin" @change="getTeacherGroups" v-model="selectedTeacher">
+        <select class="form-control input-sm schedule-top-bottom-half-rem-margin" @change="getTeacherGroups" v-model="selectedTeacher">
           <option :key="`opt-teacher-${i}`" :value="option.value" v-for="(option, i) in optionsTeacher">{{ option.text }}</option> 
         </select>
         <b>Группа:</b>
-        <select class="form-control form-control-sm custom-select custom-select-sm schedule-top-bottom-half-rem-margin" :disabled="!groups.length" v-model="selectedGroup">
+        <select class="form-control input-sm schedule-top-bottom-half-rem-margin" :disabled="!groups.length" v-model="selectedGroup">
           <option :key="`opt-groups-${i}`" :value="option.value" v-for="(option, i) in optionsGroup">{{ option.text }}</option>
         </select>
         <b>Офис:</b>
-        <select class="form-control form-control-sm custom-select custom-select-sm schedule-top-bottom-half-rem-margin" @change="getOfficeRooms" v-model="selectedOffice">
+        <select class="form-control input-sm schedule-top-bottom-half-rem-margin" @change="getOfficeRooms" v-model="selectedOffice">
           <option :key="`opt-offices-${i}`" :value="option.value" v-for="(option, i) in optionsOffice">{{ option.text }}</option>
         </select>
         <b>Кабинет:</b>
-        <select class="form-control form-control-sm custom-select custom-select-sm schedule-top-bottom-half-rem-margin" :disabled="!rooms.length" v-model="selectedRoom">
+        <select class="form-control input-sm schedule-top-bottom-half-rem-margin" :disabled="!rooms.length" v-model="selectedRoom">
           <option :key="`opt-rooms-${i}`" :value="option.value" v-for="(option, i) in optionsRoom">{{ option.text }}</option>
         </select>
         <b>Время начала:</b>
         <div class="row">
-          <div class="col">
-            <select class="form-control form-control-sm custom-select custom-select-sm schedule-top-bottom-half-rem-margin" @change="adjustEndHour" v-model="startHour">
+          <div class="col-sm-6">
+            <select class="form-control input-sm schedule-top-bottom-half-rem-margin" @change="adjustEndHour" v-model="startHour">
               <option :key="`opt-start-hours-${i}`" :value="option.value" v-for="(option, i) in optionsHours">{{ option.text }}</option>
             </select>
           </div>
-          <div class="col">
-            <select class="form-control form-control-sm custom-select custom-select-sm schedule-top-bottom-half-rem-margin" @change="adjustEndMinute" v-model="startMinute">
+          <div class="col-sm-6">
+            <select class="form-control input-sm schedule-top-bottom-half-rem-margin" @change="adjustEndMinute" v-model="startMinute">
               <option :key="`opt-start-minutes-${i}`" :value="option.value" v-for="(option, i) in optionsMinutes">{{ option.text }}</option>
             </select>
           </div>
         </div>
         <b>Время конца:</b>
         <div class="row">
-          <div class="col">
-            <select class="form-control form-control-sm custom-select custom-select-sm schedule-top-bottom-half-rem-margin" v-model="endHour">
+          <div class="col-sm-6">
+            <select class="form-control input-sm schedule-top-bottom-half-rem-margin" v-model="endHour">
               <option :key="`opt-end-hours-${i}`" :value="option.value" v-for="(option, i) in optionsHours">{{ option.text }}</option>
             </select>  
           </div>
-          <div class="col">
-            <select class="form-control form-control-sm custom-select custom-select-sm schedule-top-bottom-half-rem-margin" v-model="endMinute">
+          <div class="col-sm-6">
+            <select class="form-control input-sm schedule-top-bottom-half-rem-margin" v-model="endMinute">
               <option :key="`opt-end-minutes-${i}`" :value="option.value" v-for="(option, i) in optionsMinutes">{{ option.text }}</option>
             </select>
           </div>
         </div>
         <b>День недели:</b>
-        <select class="form-control form-control-sm custom-select custom-select-sm schedule-top-bottom-half-rem-margin" v-model="selectedDay">
+        <select class="form-control input-sm schedule-top-bottom-half-rem-margin" v-model="selectedDay">
           <option :key="`opt-days-${i}`" :value="option.value" v-for="(option, i) in optionsDay">{{ option.text }}</option> 
         </select>
         <button class="btn btn-success" type="submit">Создать</button>
