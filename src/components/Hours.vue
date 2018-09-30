@@ -1,6 +1,6 @@
 <template>
-  <div class="row">
-    <c-sidebar :filter="filterHours" :filters="filters" :user="user" />
+  <div class="row" v-if="actions.hours">
+    <c-sidebar :actions="actions" :filter="filterHours" :filters="filters" :user="user" />
     <c-content :columns="columns" :hours="hours"  />
   </div>
 </template>
@@ -19,12 +19,14 @@ export default {
   async created() {
     try {
       const result = await Promise.all([
+        this.getActions(),
         this.getScheduleFilters(),
         this.getScheduleHours()
       ]);
-      this.filters = result[0].data.filters;
-      this.columns = result[1].data.columns;
-      this.hours = prepareRows(result[1].data.hours);
+      this.actions = result[0].data.actions;
+      this.filters = result[1].data.filters;
+      this.columns = result[2].data.columns;
+      this.hours = prepareRows(result[2].data.hours);
     } catch (e) {
       notify("error", "Ошибка получения данных с сервера!");
       throw new Error("Ошибка получения данных с сервера!");
@@ -32,12 +34,22 @@ export default {
   },
   data() {
     return {
+      actions: {
+        create: false,
+        delete: false,
+        hours: false,
+        update: false,
+        view: false
+      },
       columns: [],
       filters: {},
       hours: []
     };
   },
   methods: {
+    getActions() {
+      return axios.post("/schedule?t=actions");
+    },
     getScheduleFilters() {
       return axios.post("/schedule?t=filters");
     },

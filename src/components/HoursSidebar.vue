@@ -1,31 +1,35 @@
 <template>
   <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
     <c-info :user="user"></c-info>
-    <h4 class="schedule-top-half-rem-margin">Действия:</h4>
-    <button class="btn btn-success btn-sm btn-block" type="button" @click="$router.push('/create')">
-      <i class="fa fa-plus" aria-hidden="true"></i> Добавить
-    </button>
-    <button class="btn btn-secondary btn-sm btn-block" type="button" @click="$router.push('/')">
-      <i class="fa fa-calendar" aria-hidden="true"></i> Расписание
-    </button>
-    <h4 class="schedule-top-half-rem-margin">Фильтры:</h4>
-    <form @submit.prevent="onSubmit">
-      <select class="form-control form-control-sm custom-select custom-select-sm schedule-bottom-half-rem-margin" v-if="offices.length > 1" v-model="oid">
-        <option :key="`opt-offices-${i}`" :value="option.value" v-for="(option, i) in offices">{{ option.text }}</option>
-      </select>
-      <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 schedule-bottom-half-rem-margin">
-          <button class="btn btn-info btn-sm btn-block" type="submit">
-            <i class="fa fa-filter" aria-hidden="true"></i> Применить
-          </button>
+    <div v-if="actions.create || actions.view">
+      <h4 class="schedule-top-half-rem-margin">Действия:</h4>
+      <button class="btn btn-success btn-sm btn-block" type="button" @click="$router.push('/create')" v-if="actions.create">
+        <i class="fa fa-plus" aria-hidden="true"></i> Добавить
+      </button>
+      <button class="btn btn-secondary btn-sm btn-block" type="button" @click="$router.push('/')" v-if="actions.view">
+        <i class="fa fa-calendar" aria-hidden="true"></i> Расписание
+      </button>
+    </div>
+    <div v-if="Array.isArray(filters.offices) && filters.offices.length">
+      <h4 class="schedule-top-half-rem-margin">Фильтры:</h4>
+      <form @submit.prevent="onSubmit">
+        <select class="form-control input-sm schedule-bottom-half-rem-margin" v-if="offices.length > 1" v-model="oid">
+          <option :key="`opt-offices-${i}`" :value="option.value" v-for="(option, i) in offices">{{ option.text }}</option>
+        </select>
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 schedule-bottom-half-rem-margin">
+            <button class="btn btn-info btn-sm btn-block" type="submit">
+              <i class="fa fa-filter" aria-hidden="true"></i> Применить
+            </button>
+          </div>
+          <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 schedule-bottom-half-rem-margin">
+            <button class="btn btn-warning btn-sm btn-block" @click="clearFilters" type="button">
+              <i class="fa fa-eraser" aria-hidden="true"></i> Сброс
+            </button>
+          </div>
         </div>
-        <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 schedule-bottom-half-rem-margin">
-          <button class="btn btn-warning btn-sm btn-block" @click="clearFilters" type="button">
-            <i class="fa fa-eraser" aria-hidden="true"></i> Сброс
-          </button>
-        </div>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -59,6 +63,10 @@ export default {
     }
   },
   props: {
+    actions: {
+      required: true,
+      type: Object
+    },
     filter: {
       require: true,
       type: Function

@@ -1,6 +1,6 @@
 <template>
-  <div class="row">
-    <c-sidebar :user="user" />
+  <div class="row" v-if="actions.create">
+    <c-sidebar :actions="actions" :user="user" />
     <c-content :getOfficeRooms="getOfficeRooms" :getTeacherGroups="getTeacherGroups" :groups="groups" :offices="offices" :rooms="rooms" :teachers="teachers" />
   </div>
 </template>
@@ -18,9 +18,14 @@ export default {
   },
   async created() {
     try {
-      const result = await Promise.all([this.getOffices(), this.getTeachers()]);
-      this.offices = result[0].data.offices;
-      this.teachers = result[1].data.teachers;
+      const result = await Promise.all([
+        this.getActions(),
+        this.getOffices(),
+        this.getTeachers()
+      ]);
+      this.actions = result[0].data.actions;
+      this.offices = result[1].data.offices;
+      this.teachers = result[2].data.teachers;
     } catch (e) {
       notify("error", "Ошибка получения данных с сервера!");
       throw new Error("Ошибка получения данных с сервера!");
@@ -28,6 +33,13 @@ export default {
   },
   data() {
     return {
+      actions: {
+        create: false,
+        delete: false,
+        hours: false,
+        update: false,
+        view: false
+      },
       groups: [],
       offices: [],
       rooms: [],
@@ -35,13 +47,16 @@ export default {
     };
   },
   methods: {
+    getActions() {
+      return axios.post("/schedule?t=actions");
+    },
     getOffices() {
-      return axios.get("/schedule/get-offices");
+      return axios.get("/schedule/create?t=offices");
     },
     async getOfficeRooms(e) {
       try {
         const { data } = await axios.get(
-          `/schedule/get-office-rooms?oid=${e.target.value}`
+          `/schedule/create?t=rooms&oid=${e.target.value}`
         );
         this.rooms = data.rooms;
       } catch (e) {
@@ -50,12 +65,12 @@ export default {
       }
     },
     getTeachers() {
-      return axios.get("/schedule/get-teachers");
+      return axios.get("/schedule/create?t=teachers");
     },
     async getTeacherGroups(e) {
       try {
         const { data } = await axios(
-          `/schedule/get-teacher-groups?tid=${e.target.value}`
+          `/schedule/create?t=groups&tid=${e.target.value}`
         );
         // модифицируем массив
         const groups = data.groups.map(item => {

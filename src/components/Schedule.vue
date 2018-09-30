@@ -1,6 +1,6 @@
 <template>
-  <div class="row">
-    <c-sidebar :filter="filterLessons" :filters="filters" :user="user" />
+  <div class="row" v-if="actions.view">
+    <c-sidebar :actions="actions" :filter="filterLessons" :filters="filters" :user="user" />
     <c-content :columns="columns" :lessons="lessons" />
   </div>
 </template>
@@ -19,15 +19,17 @@ export default {
   async created() {
     try {
       const result = await Promise.all([
+        this.getActions(),
         this.getScheduleFilters(),
-        this.getScheduleInfo()
+        this.getScheduleLessons()
       ]);
+      this.actions = result[0].data.actions;
       this.filters = {
-        ...result[0].data.filters,
+        ...result[1].data.filters,
         ...{ days: createDaysSelectItems() }
       };
-      this.columns = result[1].data.columns;
-      this.lessons = result[1].data.lessons;
+      this.columns = result[2].data.columns;
+      this.lessons = result[2].data.lessons;
     } catch (e) {
       notify("error", "Ошибка получения данных с сервера!");
       throw new Error("Ошибка получения данных с сервера!");
@@ -35,16 +37,26 @@ export default {
   },
   data() {
     return {
+      actions: {
+        create: false,
+        delete: false,
+        hours: false,
+        update: false,
+        view: false
+      },
       columns: [],
       lessons: [],
       filters: {}
     };
   },
   methods: {
+    getActions() {
+      return axios.post("/schedule?t=actions");
+    },
     getScheduleFilters() {
       return axios.post("/schedule?t=filters");
     },
-    getScheduleInfo() {
+    getScheduleLessons() {
       return axios.post("/schedule?t=lessons");
     },
     async filterLessons(params = {}) {
