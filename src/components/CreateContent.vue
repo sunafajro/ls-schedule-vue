@@ -1,54 +1,104 @@
 <template>
   <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10">
-    <form @submit.prevent="onSubmit">
-        <b>Преподаватель:</b>
-        <select class="form-control input-sm schedule-top-bottom-half-rem-margin" @change="getTeacherGroups" v-model="selectedTeacher">
+    <form @submit.prevent="onSubmit" style="margin-bottom: 2rem">
+      <div style="margin-bottom: 0.5rem">
+        <b>Преподаватель:</b><span style="color: red">*</span>
+        <select class="form-control input-sm" @change="getTeacherGroups" v-model="formData.selectedTeacher">
           <option :key="`opt-teacher-${i}`" :value="option.value" v-for="(option, i) in optionsTeacher">{{ option.text }}</option> 
         </select>
-        <b>Группа:</b>
-        <select class="form-control input-sm schedule-top-bottom-half-rem-margin" :disabled="!groups.length" v-model="selectedGroup">
+      </div>
+      <div style="margin-bottom: 0.5rem">
+        <b>Группа:</b><span style="color: red">*</span>
+        <select class="form-control input-sm" :disabled="!groups.length" v-model="formData.selectedGroup">
           <option :key="`opt-groups-${i}`" :value="option.value" v-for="(option, i) in optionsGroup">{{ option.text }}</option>
         </select>
-        <b>Офис:</b>
-        <select class="form-control input-sm schedule-top-bottom-half-rem-margin" @change="getOfficeRooms" v-model="selectedOffice">
+      </div>
+      <div style="margin-bottom: 0.5rem">
+        <b>Офис:</b><span style="color: red">*</span>
+        <select class="form-control input-sm" @change="getOfficeRooms" v-model="formData.selectedOffice">
           <option :key="`opt-offices-${i}`" :value="option.value" v-for="(option, i) in optionsOffice">{{ option.text }}</option>
         </select>
-        <b>Кабинет:</b>
-        <select class="form-control input-sm schedule-top-bottom-half-rem-margin" :disabled="!rooms.length" v-model="selectedRoom">
+      </div>
+      <div style="margin-bottom: 0.5rem">
+        <b>Кабинет:</b><span style="color: red">*</span>
+        <select class="form-control input-sm" :disabled="!rooms.length" v-model="formData.selectedRoom">
           <option :key="`opt-rooms-${i}`" :value="option.value" v-for="(option, i) in optionsRoom">{{ option.text }}</option>
         </select>
-        <b>Время начала:</b>
+      </div>
+      <div>
+        <b>Время начала:</b><span style="color: red">*</span>
         <div class="row">
-          <div class="col-sm-6">
-            <select class="form-control input-sm schedule-top-bottom-half-rem-margin" @change="adjustEndHour" v-model="startHour">
+          <div class="col-sm-6" style="margin-bottom: 0.5rem">
+            <select class="form-control input-sm" @change="adjustEndHour" v-model="formData.startHour">
               <option :key="`opt-start-hours-${i}`" :value="option.value" v-for="(option, i) in optionsHours">{{ option.text }}</option>
             </select>
           </div>
-          <div class="col-sm-6">
-            <select class="form-control input-sm schedule-top-bottom-half-rem-margin" @change="adjustEndMinute" v-model="startMinute">
+          <div class="col-sm-6" style="margin-bottom: 0.5rem">
+            <select class="form-control input-sm" @change="adjustEndMinute" v-model="formData.startMinute">
               <option :key="`opt-start-minutes-${i}`" :value="option.value" v-for="(option, i) in optionsMinutes">{{ option.text }}</option>
             </select>
           </div>
         </div>
-        <b>Время конца:</b>
+      </div>
+      <div>
+        <b>Время конца:</b><span style="color: red">*</span>
         <div class="row">
-          <div class="col-sm-6">
-            <select class="form-control input-sm schedule-top-bottom-half-rem-margin" v-model="endHour">
+          <div class="col-sm-6" style="margin-bottom: 0.5rem">
+            <select class="form-control input-sm" v-model="formData.endHour">
               <option :key="`opt-end-hours-${i}`" :value="option.value" v-for="(option, i) in optionsHours">{{ option.text }}</option>
             </select>  
           </div>
-          <div class="col-sm-6">
-            <select class="form-control input-sm schedule-top-bottom-half-rem-margin" v-model="endMinute">
+          <div class="col-sm-6" style="margin-bottom: 0.5rem">
+            <select class="form-control input-sm" v-model="formData.endMinute">
               <option :key="`opt-end-minutes-${i}`" :value="option.value" v-for="(option, i) in optionsMinutes">{{ option.text }}</option>
             </select>
           </div>
         </div>
-        <b>День недели:</b>
-        <select class="form-control input-sm schedule-top-bottom-half-rem-margin" v-model="selectedDay">
+      </div>
+      <div style="margin-bottom: 0.5rem">
+        <b>День недели:</b><span style="color: red">*</span>
+        <select class="form-control input-sm" v-model="formData.selectedDay">
           <option :key="`opt-days-${i}`" :value="option.value" v-for="(option, i) in optionsDay">{{ option.text }}</option> 
         </select>
-        <button class="btn btn-success" type="submit">Создать</button>
+      </div>
+      <div style="margin-bottom: 0.5rem">
+        <b>Примечания:</b>
+        <input class="form-control input-sm" v-model="formData.notes" />
+      </div>
+      <div style="margin-bottom: 0.5rem">
+        <button class="btn btn-info" type="submit" style="margin-right: 0.5rem"><i class="fa fa-save" aria-hidden="true"></i> Сохранить</button>
+        <button class="btn btn-warning" type="button" @click.prevent="clearForm"><i class="fa fa-eraser" aria-hidden="true"></i> Очистить</button>
+      </div>
     </form>
+    <div>
+      <h4>Добавленные занятия:</h4>
+      <table class="table table-striped table-hover table-bordered table-condensed small">
+        <thead>
+          <tr>
+            <th>День</th>
+            <th>Офис</th>
+            <th>Кабинет</th>
+            <th>Время</th>
+            <th>Преподаватель</th>
+            <th>Группа</th>
+            <th>Примечания</th>
+            <th>Действ.</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr :key="index" v-for="(item, index) in addedLessons">
+            <td>{{ idToValue(item.calc_denned,'day') }}</td>
+            <td>{{ idToValue(item.calc_office, 'office') }}</td>
+            <td>{{ idToValue(item.calc_cabinetoffice, 'room') }}</td>
+            <td>{{ item.time_begin }} - {{ item.time_end }}</td>
+            <td>{{ idToValue(item.calc_teacher, 'teacher') }}</td>
+            <td>{{ idToValue(item.calc_groupteacher, 'group') }}</td>
+            <td>{{ item.notes }}</td>
+            <td><i class="fa fa-trash" aria-hidden="true"></i></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -62,6 +112,19 @@ import {
   getCsrfTocken,
   notify
 } from "../utils";
+
+const defaultState = {
+  endHour: null,
+  endMinute: null,
+  selectedDay: null,
+  selectedOffice: null,
+  selectedGroup: null,
+  selectedRoom: null,
+  selectedTeacher: null,
+  startHour: null,
+  startMinute: null,
+  notes: ""
+};
 
 export default {
   computed: {
@@ -110,23 +173,16 @@ export default {
   },
   data() {
     return {
-      endHour: null,
-      endMinute: null,
-      selectedDay: null,
-      selectedOffice: null,
-      selectedGroup: null,
-      selectedRoom: null,
-      selectedTeacher: null,
-      startHour: null,
-      startMinute: null
+      addedLessons: [],
+      formData: { ...defaultState }
     };
   },
   methods: {
     adjustEndHour(e) {
-      this.adjustEndTime(e.target.value, this.startMinute);
+      this.adjustEndTime(e.target.value, this.formData.startMinute);
     },
     adjustEndMinute(e) {
-      this.adjustEndTime(this.startHour, e.target.value);
+      this.adjustEndTime(this.formData.startHour, e.target.value);
     },
     adjustEndTime(startHour, startMinute) {
       if (startHour && startMinute) {
@@ -134,15 +190,18 @@ export default {
         startDate.set("hour", parseInt(startHour));
         startDate.set("minute", parseInt(startMinute));
         const endDate = startDate.add(1, "h");
-        this.endHour =
+        this.formData.endHour =
           endDate.get("hour") < 10
             ? `0${endDate.get("hour")}`
             : String(endDate.get("hour"));
-        this.endMinute =
+        this.formData.endMinute =
           endDate.get("minute") < 10
             ? `0${endDate.get("minute")}`
             : String(endDate.get("minute"));
       }
+    },
+    clearForm() {
+      this.formData = { ...defaultState };
     },
     async createLesson(schedule = {}) {
       const token = await getCsrfTocken();
@@ -155,62 +214,101 @@ export default {
             headers: { "Content-Type": "application/json" }
           }
         );
-        const keys = Object.keys(this.$data);
-        keys.forEach(i => {
-          this[i] = null;
-        });
+        this.addedLessons.push(schedule.Schedule);
         notify("success", data.message);
       } catch (e) {
         notify("error", "Не удалось добавить занятие в расписание!");
         throw new Error("Не удалось добавить занятие в расписание!");
       }
     },
+    idToValue(id, key) {
+      let result = "";
+      switch (key) {
+        case "day":
+          {
+            const tmp = this.optionsDay.filter(item => item.value === id)[0];
+            result = tmp ? tmp.text : "";
+          }
+          break;
+        case "office":
+          {
+            const tmp = this.optionsOffice.filter(item => item.value === id)[0];
+            result = tmp ? tmp.text : "";
+          }
+          break;
+        case "room":
+          {
+            const tmp = this.optionsRoom.filter(item => item.value === id)[0];
+            result = tmp ? tmp.text : "";
+          }
+          break;
+        case "teacher":
+          {
+            const tmp = this.optionsTeacher.filter(item => item.value === id)[0];
+            result = tmp ? tmp.text : "";
+          }
+          break;
+        case "group":
+          {
+            const tmp = this.optionsGroup.filter(item => item.value === id)[0];
+            result = tmp ? tmp.text : "";
+          }
+          break;
+      }
+      return result;
+    },
     onSubmit() {
       let validForm = true;
       const data = {
         Schedule: {}
-      }
-      if (this.selectedTeacher) {
-        data.Schedule.calc_teacher = this.selectedTeacher;
+      };
+      if (this.formData.selectedTeacher) {
+        data.Schedule.calc_teacher = this.formData.selectedTeacher;
       } else {
         validForm = false;
       }
-      if (this.selectedGroup) {
-        data.Schedule.calc_groupteacher = this.selectedGroup;
+      if (this.formData.selectedGroup) {
+        data.Schedule.calc_groupteacher = this.formData.selectedGroup;
       } else {
         validForm = false;
       }
-      if (this.selectedOffice) {
-        data.Schedule.calc_office = this.selectedOffice;
+      if (this.formData.selectedOffice) {
+        data.Schedule.calc_office = this.formData.selectedOffice;
       } else {
         validForm = false;
       }
-      if (this.selectedRoom) {
-        data.Schedule.calc_cabinetoffice = this.selectedRoom;
+      if (this.formData.selectedRoom) {
+        data.Schedule.calc_cabinetoffice = this.formData.selectedRoom;
       } else {
         validForm = false;
       }
-      if (this.startHour && this.startMinute) {
-        data.Schedule.time_begin = `${this.startHour}:${this.startMinute}`;
+      if (this.formData.startHour && this.formData.startMinute) {
+        data.Schedule.time_begin = `${this.formData.startHour}:${
+          this.formData.startMinute
+        }`;
       } else {
         validForm = false;
       }
-      if (this.endHour && this.endMinute) {
-        data.Schedule.time_end = `${this.endHour}:${this.endMinute}`;
+      if (this.formData.endHour && this.formData.endMinute) {
+        data.Schedule.time_end = `${this.formData.endHour}:${
+          this.formData.endMinute
+        }`;
       } else {
         validForm = false;
       }
-      if (this.selectedDay) {
-        data.Schedule.calc_denned = this.selectedDay;
+      if (this.formData.selectedDay) {
+        data.Schedule.calc_denned = this.formData.selectedDay;
       } else {
         validForm = false;
       }
       if (validForm) {
-        this.createLesson(data);
+        data.Schedule.notes = this.formData.notes;
+        this.addedLessons.push(data.Schedule);
+        //this.createLesson(data);
       } else {
         notify("error", "Заполнены не все поля формы!");
       }
-    },
+    }
   },
   props: {
     getOfficeRooms: {
