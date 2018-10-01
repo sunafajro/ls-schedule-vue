@@ -3,7 +3,7 @@
     <table class="table table-bordered table-hover table-condensed table-striped small">
       <thead>
         <tr>
-          <th :class="item.thClass" v-for="item in columns" :key="`th-key-${item.id}`">{{ item.title }}</th>
+          <th :style="item.style" v-for="item in columns" :key="`th-key-${item.id}`">{{ item.title }}</th>
         </tr>
       </thead>
       <tbody v-if="lessons.length">

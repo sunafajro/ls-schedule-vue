@@ -2,7 +2,7 @@
   <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
     <c-info :user="user"></c-info>
     <div v-if="actions.view || actions.hours">
-      <h4 class="schedule-top-half-rem-margin">Действия:</h4>
+      <h4 style="margin-top: 1rem">Действия:</h4>
       <button class="btn btn-secondary btn-sm btn-block" type="button" @click="$router.push('/')" v-if="actions.view">
         <i class="fa fa-calendar" aria-hidden="true"></i> Расписание
       </button>
@@ -10,10 +10,10 @@
         <i class="fa fa-clock-o" aria-hidden="true"></i> Почасовка
       </button>
     </div>
-    <h4 class="schedule-top-half-rem-margin">Подсказки:</h4>
-    <div class="panel panel-default schedule-top-half-rem-margin schedule-card-half-rem-padding"><small>Список "Группа" динамический и разблокируется только после выбора преподавателя.</small></div>
-    <div class="panel panel-default schedule-top-half-rem-margin schedule-card-half-rem-padding"><small>Список "Кабинет" динамический и разблокируется только после выбора офиса.</small></div>
-    <div class="panel panel-default schedule-top-half-rem-margin schedule-card-half-rem-padding"><small>Время окончания занятия автоматически подстраивается на +1 час, после выбора времени начала занятия.</small></div>
+    <h4 style="margin-top: 1rem">Подсказки:</h4>
+    <div class="panel panel-default" style="margin-top: 0.5rem; padding: 0.5rem"><small>Список "Группа" динамический и разблокируется только после выбора преподавателя.</small></div>
+    <div class="panel panel-default" style="margin-top: 0.5rem; padding: 0.5rem"><small>Список "Кабинет" динамический и разблокируется только после выбора офиса.</small></div>
+    <div class="panel panel-default" style="margin-top: 0.5rem; padding: 0.5rem"><small>Время окончания занятия автоматически подстраивается на +1 час, после выбора времени начала занятия.</small></div>
   </div>
 </template>
 
