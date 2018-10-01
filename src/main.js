@@ -3,7 +3,6 @@ import App from "./App.vue";
 import router from "./router";
 import "noty/lib/themes/bootstrap-v3.css";
 import "noty/lib/noty.css";
-import "./style.css";
 
 Vue.config.productionTip = false;
 
