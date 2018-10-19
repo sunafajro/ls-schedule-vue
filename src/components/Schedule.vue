@@ -1,7 +1,7 @@
 <template>
   <div class="row" v-if="actions.view">
     <c-sidebar :actions="actions" :filter="filterLessons" :filters="filters" :user="user" />
-    <c-content :columns="columns" :lessons="lessons" />
+    <c-content :columns="columns" :lessons="lessons" :offices="filters.offices" />
   </div>
 </template>
 
@@ -61,8 +61,8 @@ export default {
     },
     async filterLessons(params = {}) {
       try {
-        let url = prepareUrlParams(`/schedule?t=lessons`, params);
-        const { data } = await axios.post(url);
+        //let url = prepareUrlParams(`/schedule?t=lessons`, params);
+        const { data } = await axios.post(`/schedule?t=lessons`, params);
         this.lessons = data.lessons;
       } catch (e) {
         notify("error", "Ошибка фильтрации занятий в расписании!");

@@ -7,8 +7,8 @@ moment.locale("ru");
 /**
  * выводит всплывающее уведомление
  * types: alert, success, warning, error, info/information
- * @param {string} type 
- * @param {string} text 
+ * @param {string} type
+ * @param {string} text
  */
 export const notify = (type, text) => {
   new Noty({
@@ -18,6 +18,16 @@ export const notify = (type, text) => {
     timeout: 3000,
     progressBar: false
   }).show();
+};
+
+export const createDaysObjectItems = () => {
+  const days = {};
+  for (let i = 1; i < 8; i++) {
+    days[String(i)] = moment()
+      .day(i)
+      .format("dddd");
+  }
+  return days;
 };
 
 export const createDaysSelectItems = () => {
