@@ -1,7 +1,7 @@
 <template>
   <div class="row" v-if="actions.view">
     <c-sidebar :actions="actions" :filter="filterLessons" :filters="filters" :user="user" />
-    <c-content :columns="columns" :lessons="lessons" :offices="filters.offices" />
+    <c-content :columns="columns" :lessons="lessons" />
   </div>
 </template>
 
@@ -9,7 +9,7 @@
 import axios from "axios";
 import Content from "./ScheduleContent.vue";
 import Sidebar from "./ScheduleSidebar.vue";
-import { createDaysSelectItems, notify, prepareUrlParams } from "../utils";
+import { createDaysSelectItems, notify } from "../utils";
 
 export default {
   components: {
@@ -61,7 +61,6 @@ export default {
     },
     async filterLessons(params = {}) {
       try {
-        //let url = prepareUrlParams(`/schedule?t=lessons`, params);
         const { data } = await axios.post(`/schedule?t=lessons`, params);
         this.lessons = data.lessons;
       } catch (e) {
