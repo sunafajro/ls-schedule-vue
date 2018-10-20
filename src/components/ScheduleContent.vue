@@ -1,7 +1,7 @@
 <template>
   <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10">
-    <div :key="`office-${o.value}`" v-for="o in offices">
-      <h3>{{ o.text }}</h3>
+    <div :key="`office-${o}`" v-for="o in Object.keys(lessons)">
+      <h3>{{ lessons[o].name }}</h3>
       <table class="table table-bordered table-hover table-condensed table-striped small">
         <thead>
           <tr>
@@ -9,7 +9,7 @@
           </tr>
         </thead>
         <tbody v-if="lessons.length">
-          <tr :key="`tr-${l.id}`" v-for="l in lessons" v-if="l.officeId === o.value">
+          <tr :key="`tr-${l.id}`" v-for="l in lessons[o].rows">
             <td :key="`td-${l.id}-${c.id}`" v-for="c in columns" v-if="c.show">
               <span v-if="c.id === 'day'">{{ dayName(l[c.id]) }}</span>
               <span v-if="c.id === 'group'"><a :href="`/groupteacher/view?id=${l.groupId}`">{{ l[c.id] }}</a></span>
@@ -44,12 +44,8 @@ export default {
     },
     lessons: {
       required: true,
-      type: Array
+      type: Object
     },
-    offices: {
-      required: true,
-      type: Array
-    }
   }
 };
 </script>

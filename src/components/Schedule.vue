@@ -45,7 +45,7 @@ export default {
         view: false
       },
       columns: [],
-      lessons: [],
+      lessons: {},
       filters: {}
     };
   },
