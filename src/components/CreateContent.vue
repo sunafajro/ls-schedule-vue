@@ -205,11 +205,10 @@ export default {
     },
     async createLesson(schedule = {}) {
       const token = await getCsrfTocken();
-      const body = { ...token, ...schedule };
       try {
         const { data } = await axios.post(
           "/schedule/create",
-          JSON.stringify(body),
+          JSON.stringify({ ...token, ...schedule }),
           {
             headers: { "Content-Type": "application/json" }
           }
@@ -303,8 +302,7 @@ export default {
       }
       if (validForm) {
         data.Schedule.notes = this.formData.notes;
-        this.addedLessons.push(data.Schedule);
-        //this.createLesson(data);
+        this.createLesson(data);
       } else {
         notify("error", "Заполнены не все поля формы!");
       }

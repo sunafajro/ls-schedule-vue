@@ -7,7 +7,7 @@
 
 <script>
 import axios from "axios";
-import { notify } from "../utils";
+import { getCsrfTocken, notify } from "../utils";
 import Content from "./CreateContent.vue";
 import Sidebar from "./CreateSidebar.vue";
 
@@ -48,7 +48,11 @@ export default {
   },
   methods: {
     getActions() {
-      return axios.post("/schedule?t=actions");
+      return getCsrfTocken().then(token => {
+        return axios.post("/schedule?t=actions", JSON.stringify(token), {
+          headers: { "Content-Type": "application/json" }
+        });
+      });
     },
     getOffices() {
       return axios.get("/schedule/create?t=offices");
@@ -69,7 +73,7 @@ export default {
     },
     async getTeacherGroups(e) {
       try {
-        const { data } = await axios(
+        const { data } = await axios.get(
           `/schedule/create?t=groups&tid=${e.target.value}`
         );
         // модифицируем массив
