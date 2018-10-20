@@ -20,6 +20,9 @@ export const notify = (type, text) => {
   }).show();
 };
 
+/**
+ * возвращает объект со списком дней недели
+ */
 export const createDaysObjectItems = () => {
   const days = {};
   for (let i = 1; i < 8; i++) {
@@ -30,6 +33,9 @@ export const createDaysObjectItems = () => {
   return days;
 };
 
+/**
+ * возвращает массив сос списком дней недели
+ */
 export const createDaysSelectItems = () => {
   const days = [];
   for (let i = 1; i < 8; i++) {
@@ -65,6 +71,10 @@ export const createMinutesSelectItems = () => {
   return minutes;
 };
 
+/**
+ * подготавливает и возвращает массив данных почасовки для вывода в таблице
+ * @param {Array} rows
+ */
 export const prepareRows = rows => {
   const hours = [];
   if (Object.keys(rows).length) {
@@ -85,21 +95,8 @@ export const prepareRows = rows => {
 };
 
 /**
- * возвращает url с параметрами
- * @param {string} url
- * @param {Object} params
- * @returns {string}
+ * получает csrf токен для валидации post запросов
  */
-export const prepareUrlParams = (url, params) => {
-  const args = [];
-  Object.keys(params).forEach(i => {
-    if (params[i]) {
-      args.push(`${i}=${params[i]}`);
-    }
-  });
-  return args.length ? `${url}&${args.join("&")}` : url;
-};
-
 export const getCsrfTocken = async () => {
   try {
     const { data } = await axios.get("/site/csrf");

@@ -9,7 +9,7 @@
 import axios from "axios";
 import Content from "./HoursContent.vue";
 import Sidebar from "./HoursSidebar.vue";
-import { notify, prepareUrlParams, prepareRows } from "../utils";
+import { notify, prepareRows } from "../utils";
 
 export default {
   components: {
@@ -58,8 +58,7 @@ export default {
     },
     async filterHours(params = {}) {
       try {
-        const url = prepareUrlParams("/schedule?t=hours", params);
-        const { data } = await axios.post(url);
+        const { data } = await axios.post("/schedule?t=hours", params);
         this.hours = prepareRows(data.hours);
       } catch (e) {
         notify("error", "Ошибка фильтрации почасовок преподавателей!");
