@@ -80,14 +80,14 @@ export default new Vuex.Store({
       state.user = data;
       if (data.hasOwnProperty('roleId')) {
         const filter = { ...state.defaultFilter };
-        if (data.roleId === '3') {
+        if (data.roleId !== '4' && data.roleId !== '5') {
           filter.did = moment().isoWeekday();
-        }
-        if (data.roleId === '5') {
-          filter.tid = data.teacherId;
         }
         if (data.roleId === '4') {
           filter.oid = data.officeId;
+        }
+        if (data.roleId === '5') {
+          filter.tid = data.teacherId;
         }
         state.defaultFilter = { ...filter };
       }
