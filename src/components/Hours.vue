@@ -16,10 +16,13 @@ export default {
     'c-sidebar': Sidebar,
   },
   computed: {
-    ...mapState(['scheduleActions']),
+    ...mapState(['defaultFilter', 'scheduleActions']),
   },
   async created() {
-    await this.getTeacherHours();
+    await this.getTeacherHours({
+      oid: this.defaultFilter.oid,
+      tid: this.defaultFilter.tid,
+    });
   },
   methods: {
     ...mapActions(['getTeacherHours']),

@@ -12,7 +12,7 @@ export default new Vuex.Store({
     addedLessons: [],
     csrfToken: null,
     defaultFilter: {
-      did: moment().isoWeekday(),
+      did: null,
       oid: null,
       tid: null,
     },
@@ -78,14 +78,19 @@ export default new Vuex.Store({
     },
     updateUserData(state, data) {
       state.user = data;
-      const filter = { ...this.defaultFilter };
-      if (data.hasOwnProperty('roleId') && data.roleId === '5') {
-        filter.tid = data.teacherId;
+      if (data.hasOwnProperty('roleId')) {
+        const filter = { ...state.defaultFilter };
+        if (data.roleId === '3') {
+          filter.did = moment().isoWeekday();
+        }
+        if (data.roleId === '5') {
+          filter.tid = data.teacherId;
+        }
+        if (data.roleId === '4') {
+          filter.oid = data.officeId;
+        }
+        state.defaultFilter = { ...filter };
       }
-      if (data.hasOwnProperty('roleId') && data.roleId === '4') {
-        filter.oid = data.officeId;
-      }
-      this.defaultFilter = { ...filter };
     },
   },
   actions: {
@@ -311,7 +316,10 @@ export default new Vuex.Store({
           return a;
         }, []);
         const { data } = await axios.get(
-          '/api/schedule/hours' + urlParams.join('&')
+          '/api/schedule/hours' +
+            (Array.isArray(urlParams) && urlParams.length
+              ? '?' + urlParams.join('&')
+              : '')
         );
         commit('updateTeacherHours', {
           columns: data.columns,

@@ -1,5 +1,5 @@
 <template>
-  <div class="well well-sm small" v-if="Object.keys(user).length">
+  <div class="well well-sm small" v-if="user && Object.keys(user).length">
     <b style="display: block" v-if="!user.teacherId && user.name">{{ user.name }}</b>
     <b style="display: block" v-if="user.teacherId && user.name">
       <a :href="'/teacher/view?id=' + user.teacherId">{{ user.name }}</a>

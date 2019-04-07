@@ -1,22 +1,22 @@
-import moment from "moment";
+import moment from 'moment';
 
-moment.locale("ru");
+moment.locale('ru');
 
 /**
- * возвращает объект со списком дней недели
+ * объект со списком дней недели
  */
 export const createDaysObjectItems = () => {
   const days = {};
   for (let i = 1; i < 8; i++) {
     days[String(i)] = moment()
       .day(i)
-      .format("dddd");
+      .format('dddd');
   }
   return days;
 };
 
 /**
- * возвращает массив сос списком дней недели
+ * массив со списком дней недели
  */
 export const createDaysSelectItems = () => {
   const days = [];
@@ -25,29 +25,35 @@ export const createDaysSelectItems = () => {
       value: String(i),
       text: moment()
         .day(i)
-        .format("dddd")
+        .format('dddd'),
     });
   }
   return days;
 };
 
+/**
+ * массив со списком часов
+ */
 export const createHoursSelectItems = () => {
   const hours = [];
   for (let i = 8; i < 20; i++) {
     hours.push({
-      value: i < 10 ? `0${i}` : String(i),
-      text: i < 10 ? '0' + i : String(i)
+      value: i < 10 ? '0' + i : String(i),
+      text: i < 10 ? '0' + i : String(i),
     });
   }
   return hours;
 };
 
+/**
+ * массив со списком минут, с шагом 5
+ */
 export const createMinutesSelectItems = () => {
   const minutes = [];
   for (let i = 0; i < 60; i = i + 5) {
     minutes.push({
       value: i < 10 ? '0' + i : String(i),
-      text: i < 10 ? '0' + i : String(i)
+      text: i < 10 ? '0' + i : String(i),
     });
   }
   return minutes;
@@ -68,7 +74,7 @@ export const prepareRows = rows => {
           teacher: rows[item].teacher,
           language: rows[item].languages[l].name,
           hours: rows[item].languages[l].hours,
-          rowspan: languages.length > 1 ? (i === 0 ? languages.length : 1) : 0
+          rowspan: languages.length > 1 ? (i === 0 ? languages.length : 1) : 0,
         });
       });
     });

@@ -127,7 +127,12 @@ export default {
     'c-info': Info,
   },
   computed: {
-    ...mapState(['clearScheduleFilters', 'defaultFilter', 'scheduleActions', 'scheduleFilters']),
+    ...mapState([
+      'clearScheduleFilters',
+      'defaultFilter',
+      'scheduleActions',
+      'scheduleFilters',
+    ]),
     ages() {
       const options = [{ value: null, text: '-все возрасты-' }].concat(
         Array.isArray(this.scheduleFilters.eduages)

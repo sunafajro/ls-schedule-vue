@@ -72,7 +72,7 @@ export default {
     'c-info': Info,
   },
   computed: {
-    ...mapState(['scheduleActions', 'scheduleFilters']),
+    ...mapState(['defaultFilter', 'scheduleActions', 'scheduleFilters']),
     offices() {
       const options = [{ value: null, text: '-все офисы-' }].concat(
         Array.isArray(this.scheduleFilters.offices)
@@ -81,6 +81,9 @@ export default {
       );
       return options;
     },
+  },
+  created() {
+    this.oid = this.defaultFilter.oid;
   },
   methods: {
     ...mapActions(['getTeacherHours']),

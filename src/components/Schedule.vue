@@ -21,6 +21,7 @@ export default {
   async created() {
     await this.getScheduleLessons({
       did: this.defaultFilter.did,
+      oid: this.defaultFilter.oid,
       tid: this.defaultFilter.tid,
     });
   },

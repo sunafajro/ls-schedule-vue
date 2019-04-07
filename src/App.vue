@@ -1,18 +1,28 @@
 <template>
   <div id="schedule">
-    <router-view/>
+    <div
+      class="alert alert-warning"
+      v-if="!user || (user && !Object.keys(user).length)"
+    >Загрузка приложения...</div>
+    <router-view v-if="user && Object.keys(user).length"/>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 export default {
+  computed: {
+    ...mapState(['user']),
+  },
   async created() {
-    await this.getCSRFToken();
-    await this.getUserInfo();
-    await this.getScheduleActions();
-    await this.getScheduleFilters();
+    const promises = [
+      this.getCSRFToken(),
+      this.getUserInfo(),
+      this.getScheduleActions(),
+      this.getScheduleFilters(),
+    ];
+    await Promise.all(promises);
   },
   methods: {
     ...mapActions([
