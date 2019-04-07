@@ -1,76 +1,28 @@
 <template>
-  <div class="row" v-if="actions.hours">
-    <c-sidebar :actions="actions" :filter="filterHours" :filters="filters" :user="user" />
-    <c-content :columns="columns" :hours="hours"  />
+  <div class="row" v-if="scheduleActions.hours">
+    <c-sidebar/>
+    <c-content/>
   </div>
 </template>
 
 <script>
-import axios from "axios";
-import Content from "./HoursContent.vue";
-import Sidebar from "./HoursSidebar.vue";
-import { notify, prepareRows } from "../utils";
+import { mapActions, mapState } from 'vuex';
+import Content from './HoursContent.vue';
+import Sidebar from './HoursSidebar.vue';
 
 export default {
   components: {
-    "c-content": Content,
-    "c-sidebar": Sidebar
+    'c-content': Content,
+    'c-sidebar': Sidebar,
+  },
+  computed: {
+    ...mapState(['scheduleActions']),
   },
   async created() {
-    try {
-      const result = await Promise.all([
-        this.getActions(),
-        this.getScheduleFilters(),
-        this.getScheduleHours()
-      ]);
-      this.actions = result[0].data.actions;
-      this.filters = result[1].data.filters;
-      this.columns = result[2].data.columns;
-      this.hours = prepareRows(result[2].data.hours);
-    } catch (e) {
-      notify("error", "Ошибка получения данных с сервера!");
-      throw new Error("Ошибка получения данных с сервера!");
-    }
-  },
-  data() {
-    return {
-      actions: {
-        create: false,
-        delete: false,
-        hours: false,
-        update: false,
-        view: false
-      },
-      columns: [],
-      filters: {},
-      hours: []
-    };
+    await this.getTeacherHours();
   },
   methods: {
-    getActions() {
-      return axios.post("/schedule?t=actions");
-    },
-    getScheduleFilters() {
-      return axios.post("/schedule?t=filters");
-    },
-    getScheduleHours() {
-      return axios.post("/schedule?t=hours");
-    },
-    async filterHours(params = {}) {
-      try {
-        const { data } = await axios.post("/schedule?t=hours", params);
-        this.hours = prepareRows(data.hours);
-      } catch (e) {
-        notify("error", "Ошибка фильтрации почасовок преподавателей!");
-        throw new Error("Ошибка фильтрации почасовок преподавателей!");
-      }
-    }
+    ...mapActions(['getTeacherHours']),
   },
-  props: {
-    user: {
-      required: true,
-      type: Object
-    }
-  }
 };
 </script>

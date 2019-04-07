@@ -1,32 +1,26 @@
 <template>
   <div id="schedule">
-    <router-view :user="user" />
+    <router-view/>
   </div>
 </template>
 
 <script>
-import axios from "axios";
-import { notify } from "./utils";
+import { mapActions } from 'vuex';
 
 export default {
-  created() {
-    this.getUserInfo();
-  },
-  data() {
-    return {
-      user: {}
-    };
+  async created() {
+    await this.getCSRFToken();
+    await this.getUserInfo();
+    await this.getScheduleActions();
+    await this.getScheduleFilters();
   },
   methods: {
-    async getUserInfo() {
-      try {
-        const { data } = await axios.get("/user/get-info");
-        this.user = data.userData;
-      } catch (e) {
-        notify("error", "Ошибка получения сведений о пользователе!");
-        throw new Error("Ошибка получения сведений о пользователе!");
-      }
-    }
-  }
+    ...mapActions([
+      'getCSRFToken',
+      'getScheduleActions',
+      'getScheduleFilters',
+      'getUserInfo',
+    ]),
+  },
 };
 </script>

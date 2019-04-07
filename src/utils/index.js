@@ -1,24 +1,6 @@
-import axios from "axios";
-import Noty from "noty";
 import moment from "moment";
 
 moment.locale("ru");
-
-/**
- * выводит всплывающее уведомление
- * types: alert, success, warning, error, info/information
- * @param {string} type
- * @param {string} text
- */
-export const notify = (type, text) => {
-  new Noty({
-    theme: "bootstrap-v3",
-    text: text,
-    type: type,
-    timeout: 3000,
-    progressBar: false
-  }).show();
-};
 
 /**
  * возвращает объект со списком дней недели
@@ -54,7 +36,7 @@ export const createHoursSelectItems = () => {
   for (let i = 8; i < 20; i++) {
     hours.push({
       value: i < 10 ? `0${i}` : String(i),
-      text: i < 10 ? `0${i}` : String(i)
+      text: i < 10 ? '0' + i : String(i)
     });
   }
   return hours;
@@ -64,8 +46,8 @@ export const createMinutesSelectItems = () => {
   const minutes = [];
   for (let i = 0; i < 60; i = i + 5) {
     minutes.push({
-      value: i < 10 ? `0${i}` : String(i),
-      text: i < 10 ? `0${i}` : String(i)
+      value: i < 10 ? '0' + i : String(i),
+      text: i < 10 ? '0' + i : String(i)
     });
   }
   return minutes;
@@ -82,7 +64,7 @@ export const prepareRows = rows => {
       const languages = Object.keys(rows[item].languages);
       languages.forEach((l, i) => {
         hours.push({
-          id: `${item}-${l}`,
+          id: item + '-' + l,
           teacher: rows[item].teacher,
           language: rows[item].languages[l].name,
           hours: rows[item].languages[l].hours,
@@ -92,16 +74,4 @@ export const prepareRows = rows => {
     });
   }
   return hours;
-};
-
-/**
- * получает csrf токен для валидации post запросов
- */
-export const getCsrfTocken = async () => {
-  try {
-    const { data } = await axios.get("/site/csrf");
-    return data;
-  } catch (e) {
-    throw new Error("Ошибка запроса к серверу!");
-  }
 };
