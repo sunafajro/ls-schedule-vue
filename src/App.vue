@@ -13,7 +13,7 @@ import { mapActions, mapState } from 'vuex';
 
 export default {
   computed: {
-    ...mapState(['user']),
+    ...mapState(['mode', 'user']),
   },
   async created() {
     const promises = [
@@ -22,11 +22,15 @@ export default {
       this.getScheduleActions(),
       this.getScheduleFilters(),
     ];
+    if (this.mode === 'bitrix') {
+      promises.push(this.getNavLinks());
+    }
     await Promise.all(promises);
   },
   methods: {
     ...mapActions([
       'getCSRFToken',
+      'getNavLinks',
       'getScheduleActions',
       'getScheduleFilters',
       'getUserInfo',

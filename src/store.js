@@ -6,10 +6,12 @@ import { createDaysSelectItems } from './utils';
 import moment from 'moment';
 
 Vue.use(Vuex);
+const el = document.getElementById('app');
 
 export default new Vuex.Store({
   state: {
     addedLessons: [],
+    breadcrumbs: {},
     csrfToken: null,
     defaultFilter: {
       did: null,
@@ -20,6 +22,8 @@ export default new Vuex.Store({
     groups: [],
     hoursColumns: [],
     hoursRows: [],
+    mode: el.dataset.mode,
+    navLinks: [],
     offices: [],
     rooms: [],
     scheduleActions: {
@@ -48,6 +52,9 @@ export default new Vuex.Store({
     },
     updateCSRFToken(state, token) {
       state.csrfToken = token;
+    },
+    updateNavLinks(state, data) {
+      state.navLinks = data;
     },
     updateOffices(state, data) {
       state.offices = data;
@@ -165,6 +172,22 @@ export default new Vuex.Store({
           type: 'error',
         });
         throw new Error('Ошибка запроса к серверу!');
+      }
+    },
+    async getNavLinks({ commit, dispatch, state }) {
+      try {
+        const { data: nav } = await axios.post(
+          '/site/nav',
+          JSON.stringify({ ...state.csrfToken, ...{ type: 'all' } })
+        );
+        commit('updateNavLinks', nav.navElements);
+      } catch (e) {
+        dispatch('showNotification', {
+          text:
+            'Ошибка загрузки элементов меню навигации! ' +
+            (e && e.message ? e.message : ''),
+          type: 'error',
+        });
       }
     },
     /**
