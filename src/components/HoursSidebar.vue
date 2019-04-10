@@ -1,5 +1,6 @@
 <template>
   <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
+    <nav-component v-if="mode === 'bitrix'"/>
     <c-info/>
     <div v-if="scheduleActions.create || scheduleActions.view">
       <h4 style="margin-top: 0.5rem">Действия:</h4>
@@ -61,18 +62,15 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import Info from './UserInfo.vue';
+import Navigation from '../helpers/Navigation';
 
 export default {
-  data() {
-    return {
-      oid: null,
-    };
-  },
   components: {
     'c-info': Info,
+    'nav-component': Navigation,
   },
   computed: {
-    ...mapState(['defaultFilter', 'scheduleActions', 'scheduleFilters']),
+    ...mapState(['defaultFilter', 'mode', 'scheduleActions', 'scheduleFilters']),
     offices() {
       const options = [{ value: null, text: '-все офисы-' }].concat(
         Array.isArray(this.scheduleFilters.offices)
@@ -84,6 +82,11 @@ export default {
   },
   created() {
     this.oid = this.defaultFilter.oid;
+  },
+  data() {
+    return {
+      oid: null,
+    };
   },
   methods: {
     ...mapActions(['getTeacherHours']),

@@ -1,5 +1,6 @@
 <template>
   <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10">
+    <breadcrumbs-component type="coefficients" v-if="mode === 'bitrix'"/>
     <div :key="'office-' + o" v-for="o in Object.keys(scheduleRows)">
       <h3>{{ scheduleRows[o].name }}</h3>
       <table class="table table-bordered table-hover table-condensed table-striped small">
@@ -42,10 +43,20 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 import { createDaysObjectItems } from '../utils';
+import Breadcrumbs from '../helpers/Breadcrumbs.vue';
 
 export default {
+  components: {
+    'breadcrumbs-component': Breadcrumbs,
+  },
   computed: {
-    ...mapState(['filterParams', 'scheduleColumns', 'scheduleRows', 'user']),
+    ...mapState([
+      'filterParams',
+      'mode',
+      'scheduleColumns',
+      'scheduleRows',
+      'user',
+    ]),
     days() {
       return createDaysObjectItems();
     },

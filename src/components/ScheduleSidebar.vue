@@ -1,5 +1,6 @@
 <template>
   <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+    <nav-component v-if="mode === 'bitrix'"/>
     <c-info/>
     <div v-if="scheduleActions.create || scheduleActions.hours">
       <h4 style="margin-top: 0.5rem">Действия:</h4>
@@ -121,15 +122,18 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 import Info from './UserInfo.vue';
+import Navigation from '../helpers/Navigation';
 
 export default {
   components: {
     'c-info': Info,
+    'nav-component': Navigation,
   },
   computed: {
     ...mapState([
       'clearScheduleFilters',
       'defaultFilter',
+      'mode',
       'scheduleActions',
       'scheduleFilters',
     ]),

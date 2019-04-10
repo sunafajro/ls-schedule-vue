@@ -1,5 +1,6 @@
 <template>
   <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10">
+    <breadcrumbs-component type="coefficients" v-if="mode === 'bitrix'"/>
     <form @submit.prevent="onSubmit" style="margin-bottom: 2rem">
       <div style="margin-bottom: 0.5rem">
         <b>Преподаватель:</b>
@@ -180,6 +181,7 @@
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex';
 import moment from 'moment';
+import Breadcrumbs from '../helpers/Breadcrumbs.vue';
 import {
   createDaysSelectItems,
   createHoursSelectItems,
@@ -200,8 +202,18 @@ const defaultState = {
 };
 
 export default {
+  components: {
+    'breadcrumbs-component': Breadcrumbs,
+  },
   computed: {
-    ...mapState(['addedLessons', 'groups', 'offices', 'rooms', 'teachers']),
+    ...mapState([
+      'addedLessons',
+      'groups',
+      'mode',
+      'offices',
+      'rooms',
+      'teachers',
+    ]),
     optionsDay() {
       const options = [{ value: null, text: '-выбрать-' }].concat(
         createDaysSelectItems()
@@ -261,7 +273,11 @@ export default {
       'getTeacherGroups',
       'showNotification',
     ]),
-    ...mapMutations(['updateAddedLessons', 'updateRooms', 'updateTeacherGroups']),
+    ...mapMutations([
+      'updateAddedLessons',
+      'updateRooms',
+      'updateTeacherGroups',
+    ]),
     adjustEndHour(e) {
       this.adjustEndTime(e.target.value, this.formData.startMinute);
     },

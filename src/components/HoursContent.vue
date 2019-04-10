@@ -1,5 +1,6 @@
 <template>
   <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10">
+    <breadcrumbs-component type="coefficients" v-if="mode === 'bitrix'"/>
     <table class="table table-bordered table-hover table-condensed table-striped small">
       <thead v-if="filteresColumns.length">
         <tr>
@@ -25,10 +26,14 @@
 <script>
 import { mapState } from 'vuex';
 import { prepareRows } from '../utils';
+import Breadcrumbs from '../helpers/Breadcrumbs.vue';
 
 export default {
+  components: {
+    'breadcrumbs-component': Breadcrumbs,
+  },
   computed: {
-    ...mapState(['hoursRows', 'hoursColumns']),
+    ...mapState(['hoursRows', 'hoursColumns', 'mode']),
     filteresColumns() {
       return this.hoursColumns.filter(column => column.show);
     },
