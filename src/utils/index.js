@@ -36,7 +36,7 @@ export const createDaysSelectItems = () => {
  */
 export const createHoursSelectItems = () => {
   const hours = [];
-  for (let i = 8; i < 20; i++) {
+  for (let i = 8; i < 21; i++) {
     hours.push({
       value: i < 10 ? '0' + i : String(i),
       text: i < 10 ? '0' + i : String(i),
