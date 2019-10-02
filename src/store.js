@@ -129,6 +129,36 @@ export default new Vuex.Store({
         throw new Error('Не удалось добавить занятие в расписание!');
       }
     },
+    async updateScheduleLesson({ dispatch, commit, state }, { id, schedule }) {
+      try {
+        const { data } = await axios.post(
+          '/api/schedule/update?id=' + id,
+          JSON.stringify({ ...state.csrfToken, ...schedule }),
+          { headers: { 'Content-Type': 'application/json' } }
+        );
+        dispatch('showNotification', {
+          text: data.message,
+          type: 'success',
+        });
+        commit(
+          'updateAddedLessons',
+          state.addedLessons.map(lesson => {
+            if (lesson.id !== id) {
+              lesson.notes = schedule.Schedule.notes;
+            }
+            return lesson;
+          })
+        );
+      } catch (e) {
+        dispatch('showNotification', {
+          text:
+            'Ошибка изменения занятия в расписании!' +
+            (e && e.message ? ' ' + e.message : ''),
+          type: 'error',
+        });
+        throw new Error('Ошибка изменения занятия в расписании!');
+      }
+    },
     /**
      * удаление записи из расписания
      */

@@ -12,13 +12,13 @@
         <tbody v-if="Array.isArray(scheduleRows[o].rows) && scheduleRows[o].rows.length">
           <tr :key="'tr-' + l.id" v-for="l in scheduleRows[o].rows">
             <td :key="'td-' + l.id + '-' + c.id" v-for="c in filteredColumns">
-              <span v-if="c.id === 'day'">{{ dayName(l[c.id]) }}</span>
-              <span v-if="c.id === 'group'">
+              <div v-if="c.id === 'day'">{{ dayName(l[c.id]) }}</div>
+              <div v-if="c.id === 'group'">
                 <a :href="'/groupteacher/view?id=' + l.groupId">{{ l[c.id] }}</a>
-              </span>
-              <span v-if="c.id === 'teacher'">
+              </div>
+              <div v-if="c.id === 'teacher'">
                 <a :href="'/teacher/view?id=' + l.teacherId">{{ l[c.id] }}</a>
-              </span>
+              </div>
               <div v-if="c.id === 'actions'" class="text-center">
                 <a
                   href="#"
@@ -29,9 +29,10 @@
                   <i class="fa fa-trash" aria-hidden="true"></i>
                 </a>
               </div>
-              <span
-                v-if="c.id !== 'group' && c.id !== 'teacher' && c.id !== 'day' && c.id !== 'actions'"
-              >{{ l[c.id] }}</span>
+              <comment-component v-if="c.id === 'notes'" class="text-center" :lessonId="l.id" :value="l[c.id]" />
+              <div v-if="['day', 'group', 'teacher', 'notes', 'actions'].indexOf(c.id) === -1">
+                {{ l[c.id] }}
+              </div>
             </td>
           </tr>
         </tbody>
@@ -44,10 +45,12 @@
 import { mapActions, mapState } from 'vuex';
 import { createDaysObjectItems } from '../utils';
 import Breadcrumbs from '../helpers/Breadcrumbs.vue';
+import Comment from './Comment';
 
 export default {
   components: {
     'breadcrumbs-component': Breadcrumbs,
+    'comment-component': Comment,
   },
   computed: {
     ...mapState([
