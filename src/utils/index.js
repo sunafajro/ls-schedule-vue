@@ -73,7 +73,9 @@ export const prepareRows = rows => {
           id: item + '-' + l,
           teacher: rows[item].teacher,
           language: rows[item].languages[l].name,
-          hours: rows[item].languages[l].hours,
+          hoursByService: rows[item].languages[l].hoursByService,
+          hoursBySchedule: rows[item].languages[l].hoursBySchedule,
+          actualHours: rows[item].actualHours,
           rowspan: languages.length > 1 ? (i === 0 ? languages.length : 1) : 0,
         });
       });

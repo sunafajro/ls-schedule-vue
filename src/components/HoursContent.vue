@@ -13,10 +13,13 @@
       </thead>
       <tbody v-if="preparedHours.length">
         <tr :key="'tr-key-' + item.id" v-for="item in preparedHours">
-          <td v-if="!item.rowspan">{{ item.teacher }}</td>
-          <td :rowspan="item.rowspan" v-if="item.rowspan > 1">{{ item.teacher }}</td>
-          <td>{{ item.language }}</td>
-          <td>{{ item.hours }}</td>
+          <td class="text-center" v-if="!item.rowspan">{{ item.teacher }}</td>
+          <td class="text-center" style="vertical-align: middle" :rowspan="item.rowspan" v-if="item.rowspan > 1">{{ item.teacher }}</td>
+          <td class="text-center">{{ item.language }}</td>
+          <td class="text-center">{{ item.hoursByService | formatNumbers }}</td>
+          <td class="text-center">{{ item.hoursBySchedule | formatNumbers }}</td>
+          <td class="text-center" v-if="!item.rowspan">{{ item.actualHours | formatNumbers }}</td>
+          <td class="text-center" style="vertical-align: middle" :rowspan="item.rowspan" v-if="item.rowspan > 1">{{ item.actualHours | formatNumbers }}</td>
         </tr>
       </tbody>
     </table>
@@ -40,6 +43,11 @@ export default {
     preparedHours() {
       return prepareRows(this.hoursRows);
     },
+  },
+  filters: {
+    formatNumbers($num) {
+      return $num % 1 === 0 ? $num : $num.toFixed(2);
+    }
   },
 };
 </script>
