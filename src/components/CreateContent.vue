@@ -1,147 +1,7 @@
 <template>
   <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10">
     <breadcrumbs-component type="coefficients" v-if="mode === 'bitrix'"/>
-    <form @submit.prevent="onSubmit" style="margin-bottom: 2rem">
-      <div style="margin-bottom: 0.5rem">
-        <b>Преподаватель:</b>
-        <span style="color: red">*</span>
-        <select
-          class="form-control input-sm"
-          @change="selectGroup"
-          v-model="formData.selectedTeacher"
-        >
-          <option
-            :key="'opt-teacher-' + i"
-            :value="option.value"
-            v-for="(option, i) in optionsTeacher"
-          >{{ option.text }}</option>
-        </select>
-      </div>
-      <div style="margin-bottom: 0.5rem">
-        <b>Группа:</b>
-        <span style="color: red">*</span>
-        <select
-          class="form-control input-sm"
-          :disabled="!groups.length"
-          v-model="formData.selectedGroup"
-        >
-          <option
-            :key="`opt-groups-${i}`"
-            :value="option.value"
-            v-for="(option, i) in optionsGroup"
-          >{{ option.text }}</option>
-        </select>
-      </div>
-      <div style="margin-bottom: 0.5rem">
-        <b>Офис:</b>
-        <span style="color: red">*</span>
-        <select
-          class="form-control input-sm"
-          @change="selectOffice"
-          v-model="formData.selectedOffice"
-        >
-          <option
-            :key="`opt-offices-${i}`"
-            :value="option.value"
-            v-for="(option, i) in optionsOffice"
-          >{{ option.text }}</option>
-        </select>
-      </div>
-      <div style="margin-bottom: 0.5rem">
-        <b>Кабинет:</b>
-        <span style="color: red">*</span>
-        <select
-          class="form-control input-sm"
-          :disabled="!rooms.length"
-          v-model="formData.selectedRoom"
-        >
-          <option
-            :key="`opt-rooms-${i}`"
-            :value="option.value"
-            v-for="(option, i) in optionsRoom"
-          >{{ option.text }}</option>
-        </select>
-      </div>
-      <div>
-        <b>Время начала:</b>
-        <span style="color: red">*</span>
-        <div class="row">
-          <div class="col-sm-6" style="margin-bottom: 0.5rem">
-            <select
-              class="form-control input-sm"
-              @change="adjustEndHour"
-              v-model="formData.startHour"
-            >
-              <option
-                :key="`opt-start-hours-${i}`"
-                :value="option.value"
-                v-for="(option, i) in optionsHours"
-              >{{ option.text }}</option>
-            </select>
-          </div>
-          <div class="col-sm-6" style="margin-bottom: 0.5rem">
-            <select
-              class="form-control input-sm"
-              @change="adjustEndMinute"
-              v-model="formData.startMinute"
-            >
-              <option
-                :key="`opt-start-minutes-${i}`"
-                :value="option.value"
-                v-for="(option, i) in optionsMinutes"
-              >{{ option.text }}</option>
-            </select>
-          </div>
-        </div>
-      </div>
-      <div>
-        <b>Время конца:</b>
-        <span style="color: red">*</span>
-        <div class="row">
-          <div class="col-sm-6" style="margin-bottom: 0.5rem">
-            <select class="form-control input-sm" v-model="formData.endHour">
-              <option
-                :key="`opt-end-hours-${i}`"
-                :value="option.value"
-                v-for="(option, i) in optionsHours"
-              >{{ option.text }}</option>
-            </select>
-          </div>
-          <div class="col-sm-6" style="margin-bottom: 0.5rem">
-            <select class="form-control input-sm" v-model="formData.endMinute">
-              <option
-                :key="`opt-end-minutes-${i}`"
-                :value="option.value"
-                v-for="(option, i) in optionsMinutes"
-              >{{ option.text }}</option>
-            </select>
-          </div>
-        </div>
-      </div>
-      <div style="margin-bottom: 0.5rem">
-        <b>День недели:</b>
-        <span style="color: red">*</span>
-        <select class="form-control input-sm" v-model="formData.selectedDay">
-          <option
-            :key="`opt-days-${i}`"
-            :value="option.value"
-            v-for="(option, i) in optionsDay"
-          >{{ option.text }}</option>
-        </select>
-      </div>
-      <div style="margin-bottom: 0.5rem">
-        <b>Примечания:</b>
-        <input class="form-control input-sm" v-model="formData.notes">
-      </div>
-      <div style="margin-bottom: 0.5rem">
-        <button class="btn btn-info" type="submit" style="margin-right: 0.5rem">
-          <i class="fa fa-save" aria-hidden="true"></i> Сохранить
-        </button>
-        <button class="btn btn-warning" type="button" @click.prevent="clearForm">
-          <i class="fa fa-eraser" aria-hidden="true"></i> Очистить
-        </button>
-      </div>
-    </form>
+    <c-form />
     <div>
       <h4>Добавленные занятия:</h4>
       <table class="table table-striped table-hover table-bordered table-condensed small">
@@ -179,37 +39,25 @@
 </template>
 
 <script>
-import { mapActions, mapMutations, mapState } from 'vuex';
-import moment from 'moment';
+import { mapMutations, mapState } from 'vuex';
 import Breadcrumbs from '../helpers/Breadcrumbs.vue';
+import Form from './Form.vue';
 import {
   createDaysSelectItems,
   createHoursSelectItems,
   createMinutesSelectItems,
 } from '../utils';
 
-const defaultState = {
-  endHour: null,
-  endMinute: null,
-  selectedDay: null,
-  selectedOffice: null,
-  selectedGroup: null,
-  selectedRoom: null,
-  selectedTeacher: null,
-  startHour: null,
-  startMinute: null,
-  notes: '',
-};
-
 export default {
   components: {
     'breadcrumbs-component': Breadcrumbs,
+    'c-form': Form,
   },
   computed: {
     ...mapState([
       'addedLessons',
-      'groups',
       'mode',
+      'groups',
       'offices',
       'rooms',
       'teachers',
@@ -257,52 +105,13 @@ export default {
       return options;
     },
   },
-  data() {
-    return {
-      formData: { ...defaultState },
-    };
-  },
-  destroyed() {
+  unmounted() {
     this.updateAddedLessons([]);
   },
   methods: {
-    ...mapActions([
-      'createScheduleLesson',
-      'deleteScheduleLesson',
-      'getOfficeRooms',
-      'getTeacherGroups',
-      'showNotification',
-    ]),
     ...mapMutations([
       'updateAddedLessons',
-      'updateRooms',
-      'updateTeacherGroups',
     ]),
-    adjustEndHour(e) {
-      this.adjustEndTime(e.target.value, this.formData.startMinute);
-    },
-    adjustEndMinute(e) {
-      this.adjustEndTime(this.formData.startHour, e.target.value);
-    },
-    adjustEndTime(startHour, startMinute) {
-      if (startHour && startMinute) {
-        const startDate = moment();
-        startDate.set('hour', parseInt(startHour));
-        startDate.set('minute', parseInt(startMinute));
-        const endDate = startDate.add(1, 'h');
-        this.formData.endHour =
-          endDate.get('hour') < 10
-            ? '0' + endDate.get('hour')
-            : String(endDate.get('hour'));
-        this.formData.endMinute =
-          endDate.get('minute') < 10
-            ? '0' + endDate.get('minute')
-            : String(endDate.get('minute'));
-      }
-    },
-    clearForm() {
-      this.formData = { ...defaultState };
-    },
     idToValue(id, key) {
       let result = '';
       switch (key) {
@@ -340,80 +149,6 @@ export default {
           break;
       }
       return result;
-    },
-    async onSubmit() {
-      let validForm = true;
-      const data = {
-        Schedule: {},
-      };
-      if (this.formData.selectedTeacher) {
-        data.Schedule.calc_teacher = this.formData.selectedTeacher;
-      } else {
-        validForm = false;
-      }
-      if (this.formData.selectedGroup) {
-        data.Schedule.calc_groupteacher = this.formData.selectedGroup;
-      } else {
-        validForm = false;
-      }
-      if (this.formData.selectedOffice) {
-        data.Schedule.calc_office = this.formData.selectedOffice;
-      } else {
-        validForm = false;
-      }
-      if (this.formData.selectedRoom) {
-        data.Schedule.calc_cabinetoffice = this.formData.selectedRoom;
-      } else {
-        validForm = false;
-      }
-      if (this.formData.startHour && this.formData.startMinute) {
-        data.Schedule.time_begin = `${this.formData.startHour}:${
-          this.formData.startMinute
-        }`;
-      } else {
-        validForm = false;
-      }
-      if (this.formData.endHour && this.formData.endMinute) {
-        data.Schedule.time_end = `${this.formData.endHour}:${
-          this.formData.endMinute
-        }`;
-      } else {
-        validForm = false;
-      }
-      if (this.formData.selectedDay) {
-        data.Schedule.calc_denned = this.formData.selectedDay;
-      } else {
-        validForm = false;
-      }
-      if (validForm) {
-        data.Schedule.notes = this.formData.notes;
-        await this.createScheduleLesson({ schedule: data });
-      } else {
-        this.showNotification(null, {
-          text: 'Заполнены не все поля формы!',
-          type: 'error',
-        });
-      }
-    },
-    async selectGroup(e) {
-      const newFormData = { ...this.formData };
-      newFormData.selectedGroup = null;
-      this.formData = newFormData;
-      if (e.target.value) {
-        await this.getTeacherGroups({ id: e.target.value });
-      } else {
-        this.updateTeacherGroups([]);
-      }
-    },
-    async selectOffice(e) {
-      const newFormData = { ...this.formData };
-      newFormData.selectedRoom = null;
-      this.formData = newFormData;
-      if (e.target.value) {
-        await this.getOfficeRooms({ id: e.target.value });
-      } else {
-        this.updateRooms([]);
-      }
     },
     async deleteCreatedLesson(id) {
       await this.deleteScheduleLesson({ id });

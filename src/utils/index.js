@@ -83,3 +83,29 @@ export const prepareRows = rows => {
   }
   return hours;
 };
+
+/**
+ * подготавливает и возвращает массив данных почасовки для вывода в таблице
+ * @param {String} period
+ */
+export const splitTimePeriodToHoursMinutes = period => {
+  const result = {
+    startHour: null,
+    startMinute: null,
+    endHour: null,
+    endMinute: null,
+  };  
+  const startEnd = period.split('-');
+  if (startEnd[0]) {
+    let startHoursMinutes = startEnd[0].trim().split(':');
+    result.startHour = startHoursMinutes[0] ? startHoursMinutes[0] : null;
+    result.startMinute = startHoursMinutes[1] ? startHoursMinutes[1] : null;
+  }
+  if (startEnd[1]) {
+    let startHoursMinutes = startEnd[1].trim().split(':');
+    result.endHour = startHoursMinutes[0] ? startHoursMinutes[0] : null;
+    result.endMinute = startHoursMinutes[1] ? startHoursMinutes[1] : null;
+  }
+
+  return result;
+}

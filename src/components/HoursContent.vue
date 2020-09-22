@@ -16,10 +16,10 @@
           <td class="text-center" v-if="!item.rowspan">{{ item.teacher }}</td>
           <td class="text-center" style="vertical-align: middle" :rowspan="item.rowspan" v-if="item.rowspan > 1">{{ item.teacher }}</td>
           <td class="text-center">{{ item.language }}</td>
-          <td class="text-center">{{ item.hoursByService | formatNumbers }}</td>
-          <td class="text-center">{{ item.hoursBySchedule | formatNumbers }}</td>
-          <td class="text-center" v-if="!item.rowspan">{{ item.actualHours | formatNumbers }}</td>
-          <td class="text-center" style="vertical-align: middle" :rowspan="item.rowspan" v-if="item.rowspan > 1">{{ item.actualHours | formatNumbers }}</td>
+          <td class="text-center">{{ formatNumbers(item.hoursByService) }}</td>
+          <td class="text-center">{{ formatNumbers(item.hoursBySchedule) }}</td>
+          <td class="text-center" v-if="!item.rowspan">{{ formatNumbers(item.actualHours) }}</td>
+          <td class="text-center" style="vertical-align: middle" :rowspan="item.rowspan" v-if="item.rowspan > 1">{{ formatNumbers(item.actualHours) }}</td>
         </tr>
       </tbody>
     </table>
@@ -44,10 +44,10 @@ export default {
       return prepareRows(this.hoursRows);
     },
   },
-  filters: {
-    formatNumbers($num) {
-      return $num % 1 === 0 ? $num : $num.toFixed(2);
-    }
-  },
+  methods: {
+      formatNumbers(num) {
+        return num % 1 === 0 ? num : num.toFixed(2);
+      },
+  }
 };
 </script>

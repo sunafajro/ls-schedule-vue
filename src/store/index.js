@@ -1,14 +1,13 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import { createStore } from 'vuex'
+
 import axios from 'axios';
 import Noty from 'noty';
-import { createDaysSelectItems } from './utils';
+import { createDaysSelectItems } from '../utils';
 import moment from 'moment';
 
-Vue.use(Vuex);
 const el = document.getElementById('app');
 
-export default new Vuex.Store({
+export default createStore({
   state: {
     addedLessons: [],
     breadcrumbs: {},
@@ -85,7 +84,7 @@ export default new Vuex.Store({
     },
     updateUserData(state, data) {
       state.user = data;
-      if (data.hasOwnProperty('roleId')) {
+      if (Object.prototype.hasOwnProperty.call(data, 'roleId')) {
         const filter = { ...state.defaultFilter };
         if (data.roleId !== '4' && data.roleId !== '5') {
           filter.did = moment().isoWeekday();
@@ -129,7 +128,7 @@ export default new Vuex.Store({
         throw new Error('Не удалось добавить занятие в расписание!');
       }
     },
-    async updateScheduleLesson({ dispatch, commit, state }, { id, schedule }) {
+    async updateScheduleLesson({ dispatch, state }, { id, schedule }) {
       try {
         const { data } = await axios.post(
           '/api/schedule/update?id=' + id,
@@ -140,15 +139,6 @@ export default new Vuex.Store({
           text: data.message,
           type: 'success',
         });
-        commit(
-          'updateAddedLessons',
-          state.addedLessons.map(lesson => {
-            if (lesson.id !== id) {
-              lesson.notes = schedule.Schedule.notes;
-            }
-            return lesson;
-          })
-        );
       } catch (e) {
         dispatch('showNotification', {
           text:
@@ -421,4 +411,6 @@ export default new Vuex.Store({
       }).show();
     },
   },
-});
+  modules: {
+  }
+})

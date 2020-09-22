@@ -16,14 +16,15 @@ export default {
     'c-sidebar': Sidebar,
   },
   computed: {
-    ...mapState(['defaultFilter', 'scheduleActions']),
+    ...mapState([
+      'defaultFilter',
+      'filterParams',
+      'scheduleActions'
+    ]),
   },
   async created() {
-    await this.getScheduleLessons({
-      did: this.defaultFilter.did,
-      oid: this.defaultFilter.oid,
-      tid: this.defaultFilter.tid,
-    });
+    const params = {...this.defaultFilter, ...this.filterParams};
+    await this.getScheduleLessons(params);
   },
   methods: {
     ...mapActions([

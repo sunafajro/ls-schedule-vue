@@ -61,5 +61,10 @@ export default {
       type: String,
     },
   },
+  watch: {
+    value: function (val) {
+      this.comment = val;
+    },
+  }
 };
 </script>

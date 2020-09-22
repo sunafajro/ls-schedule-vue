@@ -131,8 +131,8 @@ export default {
   },
   computed: {
     ...mapState([
-      'clearScheduleFilters',
       'defaultFilter',
+      'filterParams',
       'mode',
       'scheduleActions',
       'scheduleFilters',
@@ -187,34 +187,35 @@ export default {
     },
   },
   created() {
-    this.did = this.defaultFilter.did;
-    this.oid = this.defaultFilter.oid;
-    this.tid = this.defaultFilter.tid;
+    const params = {...this.defaultFilter, ...this.filterParams};
+    Object.keys(this.$data).forEach(i => {
+      if (params[i]) {
+          this[i] = params[i];
+      } else {
+          this[i] = null;
+      }
+    });
   },
   data() {
     return {
-      // возраст
-      aid: null,
-      // день недели
-      did: null,
-      // форма обучения
-      fid: null,
-      // язык
-      lid: null,
-      // офис
-      oid: null,
-      // преподаватель
-      tid: null,
+      aid: null, // возраст
+      did: null, // день недели
+      fid: null, // форма обучения
+      lid: null, // язык
+      oid: null, // офис
+      tid: null, // преподаватель
     };
   },
   methods: {
     ...mapActions(['getScheduleLessons']),
     async clearFilters() {
       const keys = Object.keys(this.$data);
+      const params = {};
       keys.forEach(i => {
         this[i] = null;
+        params[i] = null;
       });
-      await this.getScheduleLessons();
+      await this.getScheduleLessons(params);
     },
     async onSubmit() {
       const keys = Object.keys(this.$data);
