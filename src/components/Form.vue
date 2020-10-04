@@ -175,6 +175,7 @@ export default {
       'rooms',
       'scheduleRows',
       'teachers',
+      'urlPrefix',
     ]),
     optionsDay() {
       const options = [{ value: null, text: '-выбрать-' }].concat(
@@ -340,7 +341,7 @@ export default {
         data.Schedule.notes = this.formData.notes;
         if (this.formData.id) {
             await this.updateScheduleLesson({ id: this.formData.id, schedule: data });
-            this.$router.push('/schedule/index');
+            this.$router.push(this.urlPrefix + '/schedule/index');
         } else {
             await this.createScheduleLesson({ schedule: data });
         }

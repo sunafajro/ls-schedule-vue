@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from 'vuex';
+import { mapActions, mapMutations, mapState } from 'vuex';
 import Breadcrumbs from '../helpers/Breadcrumbs.vue';
 import Form from './Form.vue';
 import {
@@ -109,6 +109,9 @@ export default {
     this.updateAddedLessons([]);
   },
   methods: {
+    ...mapActions([
+        'deleteScheduleLesson',
+    ]),
     ...mapMutations([
       'updateAddedLessons',
     ]),

@@ -6,6 +6,7 @@ import { createDaysSelectItems } from '../utils';
 import moment from 'moment';
 
 const el = document.getElementById('app');
+const urlPrefix = el.dataset.urlPrefix;
 
 export default createStore({
   state: {
@@ -22,6 +23,7 @@ export default createStore({
     hoursColumns: [],
     hoursRows: [],
     mode: el.dataset.mode,
+    urlPrefix,
     navLinks: [],
     offices: [],
     rooms: [],
@@ -106,7 +108,7 @@ export default createStore({
     async createScheduleLesson({ dispatch, commit, state }, { schedule }) {
       try {
         const { data } = await axios.post(
-          '/api/schedule/create',
+          `${urlPrefix}/app/schedule/create`,
           JSON.stringify({ ...state.csrfToken, ...schedule }),
           { headers: { 'Content-Type': 'application/json' } }
         );
@@ -131,7 +133,7 @@ export default createStore({
     async updateScheduleLesson({ dispatch, state }, { id, schedule }) {
       try {
         const { data } = await axios.post(
-          '/api/schedule/update?id=' + id,
+          `${urlPrefix}/app/schedule/update?id=${id}`,
           JSON.stringify({ ...state.csrfToken, ...schedule }),
           { headers: { 'Content-Type': 'application/json' } }
         );
@@ -155,7 +157,7 @@ export default createStore({
     async deleteScheduleLesson({ dispatch, commit, state }, { id, params }) {
       try {
         const { data } = await axios.post(
-          '/api/schedule/delete?id=' + id,
+          `${urlPrefix}/app/schedule/delete?id=${id}`,
           JSON.stringify({ ...state.csrfToken, ...params }),
           { headers: { 'Content-Type': 'application/json' } }
         );
@@ -182,7 +184,7 @@ export default createStore({
      */
     async getCSRFToken({ commit, dispatch }) {
       try {
-        const { data } = await axios.get('/site/csrf');
+        const { data } = await axios.get(`${urlPrefix}/site/csrf`);
         commit('updateCSRFToken', data);
       } catch (e) {
         dispatch('showNotification', {
@@ -197,7 +199,7 @@ export default createStore({
     async getNavLinks({ commit, dispatch, state }) {
       try {
         const { data: nav } = await axios.post(
-          '/site/nav',
+          `${urlPrefix}/site/nav`,
           JSON.stringify({ ...state.csrfToken, ...{ type: 'all' } })
         );
         commit('updateNavLinks', nav.navElements);
@@ -215,7 +217,7 @@ export default createStore({
      */
     async getOffices({ commit, dispatch }) {
       try {
-        const { data } = await axios.get('/api/schedule/offices');
+        const { data } = await axios.get(`${urlPrefix}/app/schedule/offices`);
         commit('updateOffices', data.offices);
       } catch (e) {
         dispatch('showNotification', {
@@ -232,7 +234,7 @@ export default createStore({
      */
     async getOfficeRooms({ commit, dispatch }, { id }) {
       try {
-        const { data } = await axios.get('/api/schedule/rooms?oid=' + id);
+        const { data } = await axios.get(`${urlPrefix}/app/schedule/rooms?oid=${id}`);
         commit('updateRooms', data.rooms);
       } catch (e) {
         dispatch('showNotification', {
@@ -249,7 +251,7 @@ export default createStore({
      */
     async getScheduleActions({ commit, dispatch }) {
       try {
-        const { data } = await axios.get('/api/schedule/actions');
+        const { data } = await axios.get(`${urlPrefix}/app/schedule/actions`);
         commit('updateScheduleActions', data.actions);
       } catch (e) {
         dispatch('showNotification', {
@@ -266,7 +268,7 @@ export default createStore({
      */
     async getScheduleFilters({ commit, dispatch }) {
       try {
-        const { data } = await axios.get('/api/schedule/filters');
+        const { data } = await axios.get(`${urlPrefix}/app/schedule/filters`);
         commit('updateScheduleFilters', {
           ...data.filters,
           ...{ days: createDaysSelectItems() },
@@ -291,7 +293,7 @@ export default createStore({
           return a;
         }, []);
         const { data } = await axios.get(
-          '/api/schedule/lessons' +
+          `${urlPrefix}/app/schedule/lessons` +
             (Array.isArray(urlParams) && urlParams.length
               ? '?' + urlParams.join('&')
               : '')
@@ -313,7 +315,7 @@ export default createStore({
      */
     async getTeachers({ commit, dispatch }) {
       try {
-        const { data } = await axios.get('/api/schedule/teachers');
+        const { data } = await axios.get(`${urlPrefix}/app/schedule/teachers`);
         commit('updateTeachers', data.teachers);
       } catch (e) {
         dispatch('showNotification', {
@@ -330,7 +332,7 @@ export default createStore({
      */
     async getTeacherGroups({ commit, dispatch }, { id }) {
       try {
-        const { data } = await axios.get('/api/schedule/groups?tid=' + id);
+        const { data } = await axios.get(`${urlPrefix}/app/schedule/groups?tid=${id}`);
         // модифицируем массив
         const groups = data.groups.map(item => {
           return {
@@ -359,7 +361,7 @@ export default createStore({
           return a;
         }, []);
         const { data } = await axios.get(
-          '/api/schedule/hours' +
+          `${urlPrefix}/app/schedule/hours` +
             (Array.isArray(urlParams) && urlParams.length
               ? '?' + urlParams.join('&')
               : '')
@@ -383,7 +385,7 @@ export default createStore({
      */
     async getUserInfo({ commit, dispatch }) {
       try {
-        const { data } = await axios.get('/api/user/info');
+        const { data } = await axios.get(`${urlPrefix}/app/user/info`);
         commit('updateUserData', data.userData);
       } catch (e) {
         dispatch('showNotification', {

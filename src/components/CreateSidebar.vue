@@ -7,7 +7,7 @@
       <button
         class="btn btn-secondary btn-sm btn-block"
         type="button"
-        @click="$router.push('/schedule/index')"
+        @click="$router.push(urlPrefix + '/schedule/index')"
         v-if="scheduleActions.view"
       >
         <i class="fa fa-calendar" aria-hidden="true"></i> Расписание
@@ -15,7 +15,7 @@
       <button
         class="btn btn-secondary btn-sm btn-block"
         type="button"
-        @click="$router.push('/schedule/hours')"
+        @click="$router.push(urlPrefix + '/schedule/hours')"
         v-if="scheduleActions.create"
       >
         <i class="fa fa-clock-o" aria-hidden="true"></i> Почасовка
@@ -45,7 +45,7 @@ export default {
     'nav-component': Navigation,
   },
   computed: {
-    ...mapState(['mode', 'scheduleActions']),
+    ...mapState(['mode', 'scheduleActions', 'urlPrefix']),
   },
 };
 </script>

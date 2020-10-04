@@ -7,7 +7,7 @@
       <button
         class="btn btn-success btn-sm btn-block"
         type="button"
-        @click="$router.push('/schedule/create')"
+        @click="$router.push(urlPrefix + '/schedule/create')"
         v-if="scheduleActions.create"
       >
         <i class="fa fa-plus" aria-hidden="true"></i> Добавить
@@ -15,7 +15,7 @@
       <button
         class="btn btn-secondary btn-sm btn-block"
         type="button"
-        @click="$router.push('/schedule/hours')"
+        @click="$router.push(urlPrefix + '/schedule/hours')"
         v-if="scheduleActions.hours"
       >
         <i class="fa fa-clock-o" aria-hidden="true"></i> Почасовка
@@ -136,6 +136,7 @@ export default {
       'mode',
       'scheduleActions',
       'scheduleFilters',
+      'urlPrefix',
     ]),
     ages() {
       const options = [{ value: null, text: '-все возрасты-' }].concat(

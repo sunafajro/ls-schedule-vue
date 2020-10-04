@@ -7,7 +7,7 @@
       <button
         class="btn btn-success btn-sm btn-block"
         type="button"
-        @click="$router.push('/schedule/create')"
+        @click="$router.push(urlPrefix + '/schedule/create')"
         v-if="scheduleActions.create"
       >
         <i class="fa fa-plus" aria-hidden="true"></i> Добавить
@@ -15,7 +15,7 @@
       <button
         class="btn btn-secondary btn-sm btn-block"
         type="button"
-        @click="$router.push('/schedule/index')"
+        @click="$router.push(urlPrefix + '/schedule/index')"
         v-if="scheduleActions.view"
       >
         <i class="fa fa-calendar" aria-hidden="true"></i> Расписание
@@ -70,7 +70,7 @@ export default {
     'nav-component': Navigation,
   },
   computed: {
-    ...mapState(['defaultFilter', 'mode', 'scheduleActions', 'scheduleFilters']),
+    ...mapState(['defaultFilter', 'mode', 'scheduleActions', 'scheduleFilters', 'urlPrefix',]),
     offices() {
       const options = [{ value: null, text: '-все офисы-' }].concat(
         Array.isArray(this.scheduleFilters.offices)

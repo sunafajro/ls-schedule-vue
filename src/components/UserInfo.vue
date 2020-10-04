@@ -2,7 +2,7 @@
   <div class="well well-sm small" v-if="user && Object.keys(user).length">
     <b style="display: block" v-if="!user.teacherId && user.name">{{ user.name }}</b>
     <b style="display: block" v-if="user.teacherId && user.name">
-      <a :href="'/teacher/view?id=' + user.teacherId">{{ user.name }}</a>
+      <a :href="urlPrefix + '/teacher/view/' + user.teacherId">{{ user.name }}</a>
     </b>
     <i style="display: block" v-if="user.role">{{ user.role }}</i>
     <span style="display: block" v-if="user.roleId === '4'">{{ user.office }}</span>
@@ -14,7 +14,7 @@ import { mapState } from 'vuex';
 
 export default {
   computed: {
-    ...mapState(['user']),
+    ...mapState(['urlPrefix', 'user']),
   },
 };
 </script>

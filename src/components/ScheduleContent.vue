@@ -26,17 +26,17 @@
             <td :key="'td-' + l.id + '-' + c.id" v-for="c in filteredColumns">
               <div v-if="c.id === 'day'">{{ dayName(l[c.id]) }}</div>
               <div v-if="c.id === 'group'">
-                <a :href="'/groupteacher/view?id=' + l.groupId">{{
+                <a :href="urlPrefix + '/groupteacher/view/id=' + l.groupId">{{
                   l[c.id]
                 }}</a>
               </div>
               <div v-if="c.id === 'teacher'">
-                <a :href="'/teacher/view?id=' + l.teacherId">{{ l[c.id] }}</a>
+                <a :href="urlPrefix + '/teacher/view/' + l.teacherId">{{ l[c.id] }}</a>
               </div>
               <div v-if="c.id === 'actions'" class="text-center">
                 <a
                   href="javascript:void(0)"
-                  @click="$router.push('/schedule/update/' + l.id)"
+                  @click="$router.push(urlPrefix + '/schedule/update/' + l.id)"
                   style="margin:5px"
                   title="Изменить занятие"
                   v-if="
@@ -98,6 +98,7 @@ export default {
       'mode',
       'scheduleColumns',
       'scheduleRows',
+      'urlPrefix',
       'user',
     ]),
     days() {
