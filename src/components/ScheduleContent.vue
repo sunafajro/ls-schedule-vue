@@ -26,7 +26,7 @@
             <td :key="'td-' + l.id + '-' + c.id" v-for="c in filteredColumns">
               <div v-if="c.id === 'day'">{{ dayName(l[c.id]) }}</div>
               <div v-if="c.id === 'group'">
-                <a :href="urlPrefix + '/groupteacher/view/id=' + l.groupId">{{
+                <a :href="urlPrefix + '/groupteacher/view/' + l.groupId">{{
                   l[c.id]
                 }}</a>
               </div>
